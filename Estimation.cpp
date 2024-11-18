@@ -123,3 +123,81 @@ int main() {
 
 	return 0;
 }
+// abdullah's work
+char sunpeakhours()
+{
+    int sunhours;
+    do
+    {
+        cout << "Number of Sun Peak Hours(For ISB & KPK=5 | FOR PUNJAB=6 | FOR SINDH=7):" << " ";
+        cin >> sunhours;
+
+    } while (sunhours < 5 && sunhours > 7);
+    return sunhours;
+}
+float calculationofKWh(int sunhours)
+{
+    float totalKwh;
+    totalKwh = (sunhours * 30) / powerusage;
+    return totalKwh;
+}
+int calculationofplates(float totalKwh)
+{
+    int typeofplate, totalplates;
+    do
+    {
+        cout << "TYPE OF PLATE(575 OR 595):" << " ";
+        cin >> typeofplate;
+    } while (typeofplate != 575 && typeofplate != 595);
+    totalplates = totalKwh / typeofplate;
+    return totalplates;
+}
+char Invertortype()
+{
+    char invertor;
+    char ans1,ans2,ans3,ans4;
+    do
+    {
+        cout << "Do you need any battery storage?(yes/no):" << " ";
+        cin >> ans1;
+    } while (ans1 != 'yes' && ans1 != 'no');
+    do
+    {
+        cout << "Do you require electricity after sunset?(yes/no):" << " ";
+        cin >> ans2;
+    } while (ans2!= 'yes' && ans2 != 'no');
+     do
+    {
+        cout << "Do you want Net metereing?(yes/no):" << " ";
+        cin >> ans3;
+    } while (ans3 != 'yes' && ans3 != 'no');
+     do
+    {
+        cout << "Do you have load shedding in your area?(yes/no):" << " ";
+        cin >> ans4;
+    } while (ans4 != 'yes' && ans4 != 'no');
+    if (ans1=='yes'&&ans2=='yes'&&ans3=='yes'&&ans4=='yes')
+    {
+         invertor='Hybrid';
+         return invertor;
+    }
+    else{
+        invertor='On-Grid';
+        return invertor;
+    }
+}
+char invertorbrand(){
+    char freq,features;
+      do
+    {
+        cout << "is your grid frequency less than 250?(yes/no):" << " ";
+        cin >> freq;
+    } while (freq != 'yes' && freq != 'no');
+     do
+    {
+        cout << "do you need advanced features?(yes/no):" << " ";
+        cin >> features;
+    } while (features != 'yes' && features != 'no');
+    
+
+}
