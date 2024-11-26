@@ -1,10 +1,11 @@
+
 #include <iostream>
 using namespace std;
 // later ask if house or factory
 // int house, rooms, car, refrigerators, ac, total_ac, total_fans, total_lights;
-int rooms;
-const int powHeavy, powLight;
-float area, totalpower, totalHeavyEnergy, totalLightEnergy;
+int rooms, battery, addstandcost = 0;
+const int powHeavy = 0, powLight = 0;
+float area, totalpower, totalHeavyEnergy, totalLightEnergy, kw;
 
 float marla()
 {
@@ -171,60 +172,73 @@ float checkLightAppliances()
 //	return powerUsage;
 // }
 
-char sunpeakhours()
+int sunpeakhours()
 {
 	int sunhours;
 	do
 	{
-		cout << "Number of Sun Peak Hours(F0R UPPER PAKISTAN 5|FOR LOWER PAKISTAN 6):" << " ";
+		cout << "Please enter the number of sun peak hours: \n";
+		cout << "For Upper Pakistan, Enter 5.\n";
+		cout << "For Lower Pakistan, eEnter 6.\n";
 		cin >> sunhours;
 	} while (sunhours < 5 || sunhours > 6);
 	return sunhours;
 }
+
 float calculationofWh(int sunhours, float total_energy)
 {
 	float totalwh;
 	totalwh = (total_energy) / (sunhours * 30);
 	return totalwh;
 }
+
 int roofsize()
 {
 	int roof;
 	do
 	{
-		cout << "Enter the Roof size(in sq feet):" << " ";
+		cout << "Please enter the roof size in square feet: ";
 		cin >> roof;
 
-	} while (roof < 0);
+	} while (roof <= 0);
 	return roof;
 }
-int platetype(){
+
+int platetype()
+{
 	int typeofplate;
 	do
 	{
-		cout << "TYPE OF PLATE(575 OR 595):" << " ";
+		cout << "Choose one of the following plate options:\n";
+		cout << "(1) 575 Watt Plate - Small in size but less efficient.\n";
+		cout << "(2) 595 Watt Plate - Large in size and are more efficient.\n";
 		cin >> typeofplate;
 	} while (typeofplate != 575 && typeofplate != 595);
 	return typeofplate;
 }
-int calculationofplates(float totalKwh, int roof,int typeofplate)
+
+int calculationofplates(float totalKw, int roof, int typeofplate)
 {
-	int  totalplates;
+	int totalplates, n;
 	float areaofplates;
-	totalplates = totalKwh * 1000 / typeofplate;
+	totalplates = totalKw * 1000 / typeofplate;
 	if (typeofplate == 595)
 	{
-		areaofplates = totalplates * 30;
+		areaofplates = static_cast<float>(totalplates) * 30; // 30 square feet is size of one panel.
 		if (areaofplates > roof)
 		{
-			int n = 1;
-			while (n == 1)
+			do
 			{
-				cout << "You dont have enough space.press 1 to proceed if you can bear additional charges for stands:" << endl;
+				cout << "We regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation, please press 1 to proceed, or press 2 to continue without installing the stand." << endl;
 				cin >> n;
 				// increase additional stand charges
+			} while (n != 1 && n != 2);
+			if (n == 1)
+				return totalplates;
+			else
+			{
+				return totalplates = roof / 30;
 			}
-			totalplates = roof / 30;
 		}
 	}
 	else
@@ -232,167 +246,208 @@ int calculationofplates(float totalKwh, int roof,int typeofplate)
 		areaofplates = totalplates * 28;
 		if (areaofplates > roof)
 		{
-			int n = 1;
-			while (n == 1)
+			do
 			{
-				cout << "You dont have enough space.press 1 to proceed if you can bear additional charges for stands:" << endl;
+				cout << "We regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation, please press 1 to proceed, or press 2 to continue without installing the stand." << endl;
 				cin >> n;
-				// increase additional stand charges and labour
+				int addstandcost = 1;
+			} while (n != 1 && n != 2);
+			if (n == 1)
+				return totalplates;
+			else
+			{
+				return totalplates = roof / 28;
 			}
-			totalplates = roof / 28;
 		}
 	}
 	return totalplates;
 }
+
 char Invertortype()
 {
 	char invertor;
-	char ans1, ans2, ans3, ans4, q = 'no';
+	char ans1, ans2, ans3, ans4, q = 'n';
 	do
 	{
-		cout << "Do you need any battery storage?(yes/no):" << " ";
+		cout << " Would you like to include battery storage in your system ? Please press 'Y' for Yes or 'N' for No :";
 		cin >> ans1;
-	} while (ans1 != 'yes' && ans1 != 'no');
+		int battery = 1;
+	} while (ans1 != 'Y' && ans1 != 'N');
 	do
 	{
-		cout << "Do you require electricity after sunset?(yes/no):" << " ";
+		cout << "Do you require electricity after sunset ? Please press 'Y' for Yes or 'N' for No :";
 		cin >> ans2;
-	} while (ans2 != 'yes' && ans2 != 'no');
+	} while (ans2 != 'Y' && ans2 != 'N');
 	do
 	{
-		cout << "Do you want Net metereing?(yes/no):" << " ";
+		cout << "Do you want to enable Net Metering ? Please press 'Y' for Yes or 'N' for No :";
 		cin >> ans3;
-	} while (ans3 != 'yes' && ans3 != 'no');
+	} while (ans3 != 'Y' && ans3 != 'N');
 	do
 	{
-		cout << "Do you have load shedding in your area?(yes/no):" << " ";
+		cout << "Do you experience load shedding in your area ? Please press 'Y' for Yes or 'N' for No: ";
 		cin >> ans4;
-	} while (ans4 != 'yes' && ans4 != 'no');
-	if (ans1 == 'no' && ans2 == 'no' && ans3 == 'no' && ans4 == 'no')
+	} while (ans4 != 'Y' && ans4 != 'N');
+	if (ans1 == 'N' && ans2 == 'N' && ans3 == 'N' && ans4 == 'N')
 	{
-		invertor = 'OG';
+		invertor = 'O';
 		return invertor;
 	}
 	else
 	{
-		while (q == 'no')
-		{
 
-			cout << "Do you want to include Hybrid invertor with your On-Grid?(yes/no):" << " ";
+		do
+		{
+			cout << "Would you like to include a Hybrid Inverter with your On - Grid system ? Please press 'Y' for Yes or 'N' for No: ";
 			cin >> q;
-			invertor = 'OG';
-		}
-		invertor = 'OGH';
+
+		} while (q != 'Y' && q != 'N');
+		if (q == 'Y')
+			invertor = 'H';
+		else
+			invertor = 'O';
 	}
 	return invertor;
 }
-char invertorbrand(char invertor)
-{
-	char freq, features, brand;
-	char invertorbrand;
-	do
-	{
-		cout << "is your grid frequency less than 250?(yes/no):" << " ";
-		cin >> freq;
-	} while (freq != 'yes' && freq != 'no');
-	do
-	{
-		cout << "do you need advanced features?(yes/no):" << " ";
-		cin >> features;
-	} while (features != 'yes' && features != 'no');
-	if (invertor == 'OG' && features == 'yes' && freq == 'no')
-	{
-		do
-		{
-			cout << "We recommend you to use an exp invertor brand like Hawawei.Are you fine with it?(yes/no):" << " ";
-			cin >> brand;
-		} while (brand != 'yes' && brand != 'no');
-		if (brand == 'yes')
-		{
-			invertorbrand = 'exp';
-		}
-		else
-		{
-			invertorbrand = 'nor';
-		}
-	}
-	else
-	{
-		do
-		{
-			cout << "do you want to install an expensive brand of invertor like Hawawei?(yes/no):" << " ";
-			cin >> brand;
-		} while (brand != 'yes' && brand != 'no');
-		if (brand == 'yes')
-		{
-			invertorbrand = 'exp';
-		}
-		else
-		{
-			invertorbrand = 'nor';
-		}
-	}
-	return invertorbrand;
-}
+
 float invertorsize(char invertor, int totalplates, int typeofplate)
 {
 	char p;
-	float kwh = totalplates * typeofplate;
+	float kw = totalplates * typeofplate;
 	float invertorsize;
-	float estkwh;
-	float k;
+	float estkw;
+	float diff;
 	do
 	{
-		cout << "do you plan to expand your solar capacity in future?(yes/no):" << " ";
+		cout << "Do you plan to expand your solar capacity in the future? Please press 'Y' for Yes or 'N' for No: ";
 		cin >> p;
-	} while (p != 'yes' && p != 'no');
-	if (p == 'no' && invertor == 'OG')
+	} while (p != 'Y' && p != 'N');
+
+	if (p == 'N' && invertor == 'O')
 	{
-		
-		invertorsize = kwh;
+		diff = static_cast<float>(kw) - static_cast<int>(kw);
+		if (diff == 0)
+			invertorsize = kw;
+		else
+			invertorsize += 1;
 	}
-	else if (p == 'yes')
+	else if (p == 'Y')
 	{
-		cout << "how many estimated kwh would you need?(yes/no):" << " ";
-		cin >> estkwh;
-		kwh = kwh + estkwh;
-		if (invertor == 'OGH')
+		do
 		{
-			float Hybrid,On_grid;
-			do
-			{
-				cout << "Out of "<<kwh<< "how much do want on your hybrid invertor:"<<" ";
-				cin >> k;
-			} while (k != 'yes' && k != 'no');
-			Hybrid=k;
-			On_grid=(kwh-k);
-			invertorsize=On_grid;
-		}
-		else if (invertor=='OG')
-		{
-			invertorsize=kwh;
-		}
-		
+			cout << "How many estimated KW would you need? Please provide the amount: ";
+			cin >> estkw;
+		} while (estkw <= 0);
+		kw = kw + estkw;
+		diff = static_cast<float>(kw) - static_cast<int>(kw);
+		if (diff == 0)
+			invertorsize = kw;
+		else
+			invertorsize += 1;
 	}
+	return invertorsize;
 }
-float costs(int totalplates,int typeofplate,char invertorbrand,char invertor,float invertorsize,){
+
+int getHybridDiv(int invertorSize)
+{ // will only run if invertorType is hybrid
+	int hybridKW;
+	do
+	{
+		cout << "Out of " << invertorSize << "KW, how much do you require solely for a hybrid system (must be in integer): ";
+		cin >> hybridKW;
+	} while (hybridKW < 0 || hybridKW > invertorSize);
+	return hybridKW;
+	// once returned, pass it as parameter to getOngridDiv function to calculate the remaining KW for ongrid KW
+}
+
+int getOngridDiv(int invertorSize, char invertorType, int hybridKW)
+{ // will only run if invertorType is hybrid
+	int onGridKW;
+	if (invertorType == 'O')
+		onGridKW = invertorSize;
+	else
+		onGridKW = invertorSize - hybridKW;
+	return onGridKW;
+}
+float invertorcosts(int onGridKW, int hybridKW)
+{
+	float invertorcost = (onGridKW * 20000) + (hybridKW * 55000);
+	return invertorcost;
+}
+float platecost(int totalplates, int typeofplate)
+{
 	float platecost;
-	//int eartingcosts=price
-	//int labourcosts=perkanalprice*housesize
-	//standcosts
-	//batterycosts
-	//netmeteringcosts
-	//wire and other asscesories costs
-if (typeofplate==595)
-{
-	//platecost=totalplates*price
+	if (typeofplate == 595)
+	{
+		platecost = totalplates * 17850;
+	}
+	else if (typeofplate == 575)
+	{
+		platecost = totalplates * 16675;
+	}
+	return platecost;
 }
-else if (typeofplate==575)
+float standcost(int totalplates, int addstandcost)
 {
-	//platecost=totalplates*price
+	float standcost;
+	if (addstandcost == 1)
+	{
+		standcost = 1500 * totalplates;
+	}
+	else
+	{
+		standcost = 1200 * totalplates;
+	}
+	return standcost;
+}
+float labourcosts(float kw)
+{
+	float labourcosts;
+	if (kw <= 20)
+	{
+		labourcosts = 80000;
+	}
+	else
+	{
+		labourcosts = ((kw - 20) * 480) + (80000);
+	}
+	return labourcosts;
+}
+float batterycosts(int battery)
+{
+	float batterycosts;
+	if (battery == 1)
+	{
+		batterycosts = 200000;
+		return batterycosts;
+	}
+	return 0;
+}
+float othercosts(int totalplates)
+{
+	float othercosts = totalplates * 200;
+	return othercosts;
 }
 
+float costs(float invertorcosts, float platecost, float labourcosts, float othercosts, float batterycosts, float standcost)
+{
+	float totalcost;
+	char e;
+	do
+	{
+		cout << "Do you need protection from lighetening by spending on earthing? Please press 'Y' for Yes or 'N' for No: ";
+		cin >> e;
+	} while (e != 'Y' && e != 'N');
+	if (e == 'Y')
+	{
+		totalcost = invertorcosts + platecost + labourcosts + othercosts + batterycosts + standcost + 25000;
+	}
+	else
+	{
+		totalcost = invertorcosts + platecost + labourcosts + othercosts + batterycosts + standcost;
+	}
 
+	return totalcost;
 }
 
 int main()
