@@ -70,7 +70,7 @@ float energyac(float num)
 	float time;
 	cout << "Enter hours per day taken to charge your car daily: ";
 	cin >> time;
-	return 1500 * num * time * 30;
+	return 1300 * num * time * 30;
 }
 
 float mischeavyenergy(float num)
@@ -79,7 +79,7 @@ float mischeavyenergy(float num)
 
 	cout << "Enter hours per day used by these appliances: ";
 	cin >> time;
-	return 700 * num * time * 30;
+	return 500 * num * time * 30;
 }
 float totalHeavyenergy()
 {
@@ -172,7 +172,7 @@ float checkLightAppliances()
 //	return powerUsage;
 // }
 
-int sunpeakhours()
+int sunpeakhours() // to calculate the peak sun hours per day
 {
 	int sunhours;
 	do
@@ -185,14 +185,14 @@ int sunpeakhours()
 	return sunhours;
 }
 
-float calculationofWh(int sunhours, float total_energy)
+float calculationofWh(int sunhours, float total_energy) // to calculate the energy the solar has to generate per month
 {
 	float totalwh;
 	totalwh = (total_energy) / (sunhours * 30);
 	return totalwh;
 }
 
-int roofsize()
+int roofsize() // the roof area of the house in sq feet
 {
 	int roof;
 	do
@@ -204,7 +204,7 @@ int roofsize()
 	return roof;
 }
 
-int platetype()
+int platetype() // the plate type
 {
 	int typeofplate;
 	do
@@ -217,11 +217,11 @@ int platetype()
 	return typeofplate;
 }
 
-int calculationofplates(float totalKw, int roof, int typeofplate)
+int calculationofplates(float totalwh, int roof, int typeofplate) // to calculate the plates required
 {
 	int totalplates, n;
 	float areaofplates;
-	totalplates = totalKw * 1000 / typeofplate;
+	totalplates = totalwh / typeofplate;
 	if (typeofplate == 595)
 	{
 		areaofplates = static_cast<float>(totalplates) * 30; // 30 square feet is size of one panel.
@@ -231,39 +231,45 @@ int calculationofplates(float totalKw, int roof, int typeofplate)
 			{
 				cout << "We regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation, please press 1 to proceed, or press 2 to continue without installing the stand." << endl;
 				cin >> n;
-				// increase additional stand charges
 			} while (n != 1 && n != 2);
 			if (n == 1)
-				return totalplates;
+				int addstandcost = 1;
+			return totalplates;
 			else
 			{
 				return totalplates = roof / 30;
 			}
 		}
+		else{
+			totalplates=static_cast<float>(totalplates);
+		}
 	}
 	else
 	{
-		areaofplates = totalplates * 28;
+		areaofplates = static_cast<float>(totalplates) * 28;
 		if (areaofplates > roof)
 		{
 			do
 			{
 				cout << "We regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation, please press 1 to proceed, or press 2 to continue without installing the stand." << endl;
 				cin >> n;
-				int addstandcost = 1;
 			} while (n != 1 && n != 2);
 			if (n == 1)
-				return totalplates;
+				int addstandcost = 1;
+			return totalplates;
 			else
 			{
 				return totalplates = roof / 28;
 			}
 		}
+		else{
+			totalplates=static_cast<float>(totalplates);
+		}
 	}
 	return totalplates;
 }
 
-char Invertortype()
+char Invertortype() // to calculate the type of invertor(ongrid/hybrid)
 {
 	char invertor;
 	char ans1, ans2, ans3, ans4, q = 'n';
@@ -291,7 +297,6 @@ char Invertortype()
 	if (ans1 == 'N' && ans2 == 'N' && ans3 == 'N' && ans4 == 'N')
 	{
 		invertor = 'O';
-		return invertor;
 	}
 	else
 	{
@@ -310,10 +315,10 @@ char Invertortype()
 	return invertor;
 }
 
-float invertorsize(char invertor, int totalplates, int typeofplate)
+float invertorsize(char invertor, int totalplates, int typeofplate) // to calculate the total size of the invertor
 {
 	char p;
-	float kw = totalplates * typeofplate;
+	float kw = (totalplates * typeofplate)/1000;
 	float invertorsize;
 	float estkw;
 	float diff;
@@ -348,8 +353,8 @@ float invertorsize(char invertor, int totalplates, int typeofplate)
 	return invertorsize;
 }
 
-int getHybridDiv(int invertorSize)
-{ // will only run if invertorType is hybrid
+int getHybridDiv(int invertorSize) // to calculate the size of the hybrid invertor
+{								   // will only run if invertorType is hybrid
 	int hybridKW;
 	do
 	{
@@ -360,8 +365,8 @@ int getHybridDiv(int invertorSize)
 	// once returned, pass it as parameter to getOngridDiv function to calculate the remaining KW for ongrid KW
 }
 
-int getOngridDiv(int invertorSize, char invertorType, int hybridKW)
-{ // will only run if invertorType is hybrid
+int getOngridDiv(int invertorSize, char invertorType, int hybridKW) // to calculate the ongrid invertor size
+{																	// will only run if invertorType is hybrid
 	int onGridKW;
 	if (invertorType == 'O')
 		onGridKW = invertorSize;
@@ -369,12 +374,20 @@ int getOngridDiv(int invertorSize, char invertorType, int hybridKW)
 		onGridKW = invertorSize - hybridKW;
 	return onGridKW;
 }
-float invertorcosts(int onGridKW, int hybridKW)
+float invertorcosts(int onGridKW, int hybridKW, char invertor) // to calculate the total invertor cost
 {
-	float invertorcost = (onGridKW * 20000) + (hybridKW * 55000);
+	if (invertor == 'H')
+	{
+		float invertorcost = (onGridKW * 20000) + (hybridKW * 55000);
+	}
+	else
+	{
+		float invertorcost = (onGridKW * 20000);
+	}
+
 	return invertorcost;
 }
-float platecost(int totalplates, int typeofplate)
+float platecost(int totalplates, int typeofplate) // to calculate the total cost of plates
 {
 	float platecost;
 	if (typeofplate == 595)
@@ -387,7 +400,7 @@ float platecost(int totalplates, int typeofplate)
 	}
 	return platecost;
 }
-float standcost(int totalplates, int addstandcost)
+float standcost(int totalplates) // to calculate the total cost of the stands
 {
 	float standcost;
 	if (addstandcost == 1)
@@ -400,7 +413,7 @@ float standcost(int totalplates, int addstandcost)
 	}
 	return standcost;
 }
-float labourcosts(float kw)
+float labourcosts() // to calculate the total cost of the stands
 {
 	float labourcosts;
 	if (kw <= 20)
@@ -409,11 +422,11 @@ float labourcosts(float kw)
 	}
 	else
 	{
-		labourcosts = ((kw - 20) * 480) + (80000);
+		labourcosts = ((kw - 20) * 500) + (80000);
 	}
 	return labourcosts;
 }
-float batterycosts(int battery)
+float batterycosts() // the total battery cost
 {
 	float batterycosts;
 	if (battery == 1)
@@ -423,13 +436,13 @@ float batterycosts(int battery)
 	}
 	return 0;
 }
-float othercosts(int totalplates)
+float othercosts(int totalplates) // to calculate other costs like wires etc
 {
 	float othercosts = totalplates * 200;
 	return othercosts;
 }
 
-float costs(float invertorcosts, float platecost, float labourcosts, float othercosts, float batterycosts, float standcost)
+float costs(float invertorcosts, float platecost, float labourcosts, float othercosts, float batterycosts, float standcost) // to calculate the total cost of the solar system
 {
 	float totalcost;
 	char e;
@@ -448,6 +461,11 @@ float costs(float invertorcosts, float platecost, float labourcosts, float other
 	}
 
 	return totalcost;
+}
+float energysaved(float total_energy)
+{
+	float billsaved = (total_energy/1000) * 64;
+	return billsaved;
 }
 
 int main()
