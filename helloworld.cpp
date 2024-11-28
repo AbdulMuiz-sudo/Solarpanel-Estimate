@@ -241,7 +241,7 @@ int calculationofplates(float totalwh, int roof, int typeofplate) // to calculat
 			}
 		}
 		else{
-			totalplates=static_cast<float>(totalplates);
+			totalplates=(totalplates);
 		}
 	}
 	else
@@ -263,7 +263,7 @@ int calculationofplates(float totalwh, int roof, int typeofplate) // to calculat
 			}
 		}
 		else{
-			totalplates=static_cast<float>(totalplates);
+			totalplates=(totalplates);
 		}
 	}
 	return totalplates;
