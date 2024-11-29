@@ -1,10 +1,12 @@
 #include <iostream>
+#include<fstream>
 using namespace std;
 
 int battery, addstandcost = 0;
 float area, totalpower, totalHeavyEnergy, totalLightEnergy, kw;
+string surname, lastname, username,email, password, confirmpassword,logusername,logpassword;
 
-float marla(){
+float marla() {
 	// returns Kanals
 	float marlasize;
 	do
@@ -13,10 +15,10 @@ float marla(){
 		cin >> marlasize;
 	} while (marlasize < 5 || marlasize > 20);
 	marlasize /= 20;
-	
+
 	return marlasize;
 }
-float kanal(){
+float kanal() {
 	// returns kanals
 	float kanalsize;
 	do
@@ -28,10 +30,10 @@ float kanal(){
 	return kanalsize;
 }
 
-int checkRoom(){
+int checkRoom() {
 	// return number of rooms that use electricity 
 	int rooms;
-	do{
+	do {
 		cout << "Enter number of rooms that actively use electricity: ";
 		cin >> rooms;
 	} while (rooms <= 0 || rooms >= 25);
@@ -39,7 +41,7 @@ int checkRoom(){
 }
 
 // heavy Appliances 1) ask number 2) return their energies
-float energyCars(float noOfCars){
+float energyCars(float noOfCars) {
 	// returns energy in Wh used by all electric cars
 	if (noOfCars == 0)
 		return 0;
@@ -49,25 +51,25 @@ float energyCars(float noOfCars){
 		cout << "Enter hours per day taken to charge your car daily: ";
 		cin >> time;
 	} while (time < 0 || time>24);
-	
+
 	return 7200 * noOfCars * time * 30;
 }
-float energyFridge(float noOfFridge){
+float energyFridge(float noOfFridge) {
 	// returns energy in Wh used by all refrigerators
 	return 600 * noOfFridge * 24 * 30;
 }
-float energyAC(float noOfAC){
+float energyAC(float noOfAC) {
 	// returns energy in Wh used by all AC's
 	float time;
 	do
 	{
 		cout << "How many hours a day do you typically run your air conditioner? ";
 		cin >> time;
-	} while (time<0 || time>24);
-	
+	} while (time < 0 || time>24);
+
 	return 1300 * noOfAC * time * 30;
 }
-float energyMiscHeavy(float misHeavyAppliances){
+float energyMiscHeavy(float misHeavyAppliances) {
 	// returns energy in Wh used by miscellaneous appliances
 	float time;
 	do
@@ -75,10 +77,10 @@ float energyMiscHeavy(float misHeavyAppliances){
 		cout << "Enter hours per day used by these heavy miscellaneous appliances: ";
 		cin >> time;
 	} while (time < 0 || time>24);
-	
+
 	return 500 * misHeavyAppliances * time * 30;
 }
-float energyHeavyTotal(){
+float energyHeavyTotal() {
 	// returns total Wh of electric cars, ac, fridge
 	int car, refrigerators, ac, mischeavy;
 	float energy_car, energy_fridge, energy_AC, energy_mis_heavy;
@@ -109,7 +111,7 @@ float energyHeavyTotal(){
 	return energy_car + energy_fridge + energy_AC + energy_mis_heavy;
 }
 // light Appliances 1) ask number 2) return their energies
-float energyFans(int noOfFans){
+float energyFans(int noOfFans) {
 	// returns Wh of all fans
 	float time;
 	do
@@ -117,10 +119,10 @@ float energyFans(int noOfFans){
 		cout << "Enter the number of hours per day each fan is used: ";
 		cin >> time;
 	} while (time < 0 || time>24);
-	
+
 	return 50 * noOfFans * time * 30;
 }
-float energyLights(int noOfLights){
+float energyLights(int noOfLights) {
 	// returns Wh of all lights
 	float time;
 	do
@@ -128,10 +130,10 @@ float energyLights(int noOfLights){
 		cout << "Enter the number of hours per day each light is used: ";
 		cin >> time;
 	} while (time < 0 || time>24);
-	
+
 	return 15 * noOfLights * time * 30;
 }
-float energyMiscSmall(float misSmallAppl){
+float energyMiscSmall(float misSmallAppl) {
 	// returns Wh of all small miscellaneous appliances
 	float time;
 	do
@@ -142,7 +144,7 @@ float energyMiscSmall(float misSmallAppl){
 
 	return 20 * misSmallAppl * time * 30;
 }
-float energyLightTotal(int rooms){
+float energyLightTotal(int rooms) {
 	// returns Wh of all light appliances
 	int fans, lightsPerRoom, total_fans, total_lights, miscsmall;
 	float energy_Fans, energy_Lights, energy_mis_small;
@@ -175,7 +177,7 @@ float energyLightTotal(int rooms){
 // solar panels
 
 int getSunpeakhours() // to calculate the peak sun hours per day
-{	
+{
 	// returns sun hours 
 	int sunhours;
 	do
@@ -201,7 +203,7 @@ float roofsize() // the roof area of the house in sq feet
 	{
 		cout << "Please enter the roof size in square feet: ";
 		cin >> roofSqFt;
-	} while (roofSqFt <= 0 || roofSqFt >108900);
+	} while (roofSqFt <= 0 || roofSqFt > 108900);
 	return roofSqFt;
 }
 int platetype() // returns the plate type
@@ -222,9 +224,9 @@ int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) 
 	int totalplates, n;
 	float areaofplates;
 	totalplates = Wh_requirement / typeofplate;
-	if (typeofplate == 595){ // choice is 595
+	if (typeofplate == 595) { // choice is 595
 		areaofplates = totalplates * 30; // 30 square feet is size of one panel.
-		if (areaofplates > roof_size){
+		if (areaofplates > roof_size) {
 			do
 			{
 				cout << "We regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation, please press 1 to proceed, or press 2 to continue without installing the stand." << endl;
@@ -235,7 +237,7 @@ int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) 
 				int addstandcost = 1;
 				return totalplates;
 			}
-			else{
+			else {
 				return totalplates = roof_size / 30.0;
 			}
 		}
@@ -243,9 +245,9 @@ int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) 
 			return totalplates;
 		}
 	}
-	else{ // choice is 575
+	else { // choice is 575
 		areaofplates = totalplates * 28.0;
-		if (areaofplates > roof_size){
+		if (areaofplates > roof_size) {
 			do
 			{
 				cout << "We regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation, please press 1 to proceed, or press 2 to continue without installing the stand." << endl;
@@ -255,7 +257,7 @@ int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) 
 				int addstandcost = 1;
 				return totalplates;
 			}
-			else{
+			else {
 				return totalplates = roof_size / 28.0;
 			}
 		}
@@ -263,10 +265,10 @@ int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) 
 			return totalplates;
 		}
 	}
-	
+
 }
 char Invertortype() // calculates the type of invertor(ongrid/hybrid) 
-					// returns (O/H)
+// returns (O/H)
 {
 	char invertor;
 	char ans1, ans2, ans3, ans4, q = 'n';
@@ -274,7 +276,7 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 	{
 		cout << "Would you like to include battery storage in your system? Please press 'Y' for Yes or 'N' for No :";
 		cin >> ans1;
-		
+
 	} while (ans1 != 'Y' && ans1 != 'N');
 	if (ans1 == 'Y')
 		battery = 1;
@@ -293,7 +295,7 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 		cout << "Do you experience load shedding in your area? Please press 'Y' for Yes or 'N' for No: ";
 		cin >> ans4;
 	} while (ans4 != 'Y' && ans4 != 'N');
-	if (ans1 == 'N' && ans2 == 'N' && ans3 == 'N' && ans4 == 'N'){
+	if (ans1 == 'N' && ans2 == 'N' && ans3 == 'N' && ans4 == 'N') {
 		invertor = 'O';
 	}
 	else
@@ -330,6 +332,7 @@ float invertorsize(char invertorType, int totalplates, int typeofplate) // to ca
 		diff = static_cast<float>(kw) - static_cast<int>(kw);
 		if (diff == 0)
 			invertorsize = kw;
+
 		else
 			invertorsize = kw + 1;
 	}
@@ -393,10 +396,10 @@ float standcost(int totalplates) // returns the total cost of the stands
 float labourcosts() // to calculate the total cost of the stands
 {
 	float labourcosts;
-	if (kw <= 20){
+	if (kw <= 20) {
 		labourcosts = 80000;
 	}
-	else{
+	else {
 		labourcosts = ((kw - 20) * 500) + (80000);
 	}
 	return labourcosts;
@@ -444,13 +447,73 @@ float energysaved(float total_energy)
 	float billsaved = (total_energy / 1000) * 64;
 	return billsaved;
 }
+void login() 
+{
+	cout << "WELCOME:  " << surname<<" "<<lastname << endl << endl;
+	cout << "PLease complete the following fields to successfuly log in to your account: \n\n";
+	do
+	{
+		cout << "Please enter the username: ";
+		cin >> logusername;
+	} while (logusername != username);
+	do {
+		cout << "Please enter the password: ";
+		cin >> logpassword;
+	} while (logpassword != password);
+	cout << "WELCOME USER: " << username<<endl<<endl<<endl;
+	cout << "PLEASE FILL OUT THE FORM TO RECEIVE AN ACCURATE ESTIMATION OF YOUR SOLAR PANEL REQUIREMENTS. ENSURE THAT YOU PROVIDE PRECISE DETAILS AND FIGURES FOR THE MOST RELIABLE RESULTS. FEEL FREE TO VERIFY YOUR VALUES AGAINST YOUR ELECTRICITY BILLS OR CONSULT WITH A TRUSTED ADVISOR IF NEEDED. " << endl << endl << endl << endl << endl;
+}
 
 
 
-int main(){
+
+
+void createaccount()
+{
+	int log;
+	cout << "CREATE AN ACCONT\n\n";
+	cout << "Please complete the following fields to successfully set up your account. Ensure all information provided is accurate to proceed smoothly with the setup process\n";
+	cout <<endl<< "Please enter your surname: ";
+	cin >> surname;
+	cout <<endl<<"Please enter your last name: ";
+	cin >> lastname;
+	cout <<endl<< "Please enter a valid e-mail address: ";
+	cin >> email;
+	cout <<endl<< "Please enter your desired username as it will appear on your profile: ";
+	cin >> username;
+	cout <<endl<< "Please create a secure password for your account: ";
+	cin >> password;
+	do {
+		cout << "Re-enter your password for confirmation: ";
+		cin >> confirmpassword;
+	} while (password != confirmpassword);
+	cout <<endl<< "Congratulations! Your account has been successfully set up.\n\n";
+	do {
+		cout << "Now Press 1 to log in to your account:";
+		cin >> log;
+	} while (log != 1);
+	login();
+
+}
+
+
+
+
+int main() {
 	float total_energy_usage, watt_hr_requirement, roof_size, invertor_size, Ongrid_invertor_size, Hybrid_invertor_size, invertor_cost, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, total_cost, energy_saved;
 	char house, invertor_type;
-	int rooms, sun_hours, plate_type, plates_requirement;
+	
+	int rooms, sun_hours, plate_type, plates_requirement,check;
+
+	cout << "WELCOME TO THE SOLAR PANEL ESTIMATOR\n\n\n";
+	do {
+		cout << "Press 1 to Create an Account: ";
+		cin >> check;
+	} while (check != 1);
+	cout << endl;
+	createaccount();
+		
+
 	do
 	{
 		cout << "Please enter house measurement unit (M or Marla or K for Kanal): ";
@@ -468,7 +531,7 @@ int main(){
 	cout << "Your units consumed per month are: " << total_energy_usage / 1000 << endl;     // remove after
 
 
-	cout << "calculating solar requirements: "; // will remove this line later
+	cout << "calculating solar requirements:\n "; // will remove this line later
 	sun_hours = getSunpeakhours();
 	watt_hr_requirement = calculationofWh(sun_hours, total_energy_usage);
 	roof_size = roofsize();
@@ -506,3 +569,4 @@ int main(){
 	cout << "By using this solar arrangement you can save " << energy_saved << " watt hours.";
 	return 0;
 }
+
