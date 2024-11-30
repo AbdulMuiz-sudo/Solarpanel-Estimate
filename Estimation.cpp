@@ -1,5 +1,6 @@
 #include <iostream>
 #include<fstream>
+#include<string>
 using namespace std;
 
 int battery, addstandcost = 0, totalapp = 0;
@@ -454,7 +455,7 @@ int userOption() {
 	} while (option < 1 || option>5);
 	return option;
 }
-void login()
+bool login()
 {
 	cout << "WELCOME:  " << forename << " " << surname << endl << endl;
 	cout << "PLease complete the following fields to successfuly log in to your account: \n\n";
@@ -475,6 +476,7 @@ void login()
 		} while (logpassword != password);
 		cout << "WELCOME USER: " << username << endl << endl << endl;
 		cout << "PLEASE FILL OUT THE FORM TO RECEIVE AN ACCURATE ESTIMATION OF YOUR SOLAR PANEL REQUIREMENTS. ENSURE THAT YOU PROVIDE PRECISE DETAILS AND FIGURES FOR THE MOST RELIABLE RESULTS. FEEL FREE TO VERIFY YOUR VALUES AGAINST YOUR ELECTRICITY BILLS OR CONSULT WITH A TRUSTED ADVISOR IF NEEDED. " << endl << endl << endl << endl << endl;
+		return true;
 	}
 
 }
@@ -616,15 +618,16 @@ int main() {
 
 			break;
 		case 2:
+			// views all profiles
+			// ask for pw and username
+			// check file, if doesnt exist then print No profiles exist and ask options 1-5 again
 			ofstream inData("profiles.txt");
 			if (!inData) {
 				cout << "File doesnt exist. Try another option.\n";
 				break;
 			}
 			login();
-			// views all profiles
-			// ask for pw and username
-			// check file, if doesnt exist then print No profiles exist and ask options 1-5 again
+			
 			break;
 		case 3:
 			// updates a profile
@@ -649,11 +652,6 @@ int main() {
 			return 0;
 		}
 	}
-
-	
-
-
-	
 
 	return 0;
 }
