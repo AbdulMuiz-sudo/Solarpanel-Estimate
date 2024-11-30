@@ -212,8 +212,8 @@ int platetype() // returns the plate type
 	do
 	{
 		cout << "Choose one of the following plate options:\n";
-		cout << "(1) 575 Watt Plate - Small in size but less efficient.\n";
-		cout << "(2) 595 Watt Plate - Large in size but are more efficient.\n";
+		cout << "575 Watt Plate - Small in size but less efficient.\n";
+		cout << "595 Watt Plate - Large in size but are more efficient.\n";
 		cin >> typeofplate;
 	} while (typeofplate != 575 && typeofplate != 595);
 	return typeofplate;
@@ -270,46 +270,39 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 // returns (O/H)
 {
 	char invertor;
-	char ans1, ans2, ans3, ans4, q = 'n';
-	do
-	{
-		cout << "Would you like to include battery storage in your system? Please press 'Y' for Yes or 'N' for No :";
-		cin >> ans1;
+	char ans1, ans2, invertorChoice;
 
-	} while (ans1 != 'Y' && ans1 != 'N');
-	if (ans1 == 'Y')
-		battery = 1;
 	do
 	{
-		cout << "Do you require electricity after sunset? Please press 'Y' for Yes or 'N' for No :";
+		cout << "Do you require electricity after sunset? (Y/N)";
+		cin >> ans1;
+	} while (ans1 != 'Y' && ans1 != 'N');
+
+	do
+	{
+		cout << "Do you experience load shedding in your area? (Y/N)";
 		cin >> ans2;
 	} while (ans2 != 'Y' && ans2 != 'N');
-	do
-	{
-		cout << "Do you want to enable Net Metering? Please press 'Y' for Yes or 'N' for No :";
-		cin >> ans3;
-	} while (ans3 != 'Y' && ans3 != 'N');
-	do
-	{
-		cout << "Do you experience load shedding in your area? Please press 'Y' for Yes or 'N' for No: ";
-		cin >> ans4;
-	} while (ans4 != 'Y' && ans4 != 'N');
-	if (ans1 == 'N' && ans2 == 'N' && ans3 == 'N' && ans4 == 'N') {
+	if (ans1 == 'N' && ans2 == 'N') {
 		invertor = 'O';
 	}
 	else
 	{
-
 		do
 		{
-			cout << "Would you like to include a Hybrid Inverter with your On-Grid system ? Please press 'Y' for Yes or 'N' for No: ";
-			cin >> q;
-
-		} while (q != 'Y' && q != 'N');
-		if (q == 'Y')
+			cout << "We recommend that you select a Hybrid invertor.\n";
+			cout << "Would you like to include a Hybrid Invertor with your On-Grid system ? (Y/N): ";
+			cin >> invertorChoice;
+		} while (invertorChoice != 'Y' && invertorChoice != 'N');
+		if (invertorChoice == 'Y') {
+			battery = 1;
 			invertor = 'H';
-		else
+			cout << "According to your requirements a Hybrid system is suitable.\n";
+		}
+		else {
 			invertor = 'O';
+			cout << "According to your requirements an On-Grid system is suitable.\n";
+		}
 	}
 	return invertor;
 }
@@ -322,7 +315,7 @@ float invertorsize(char invertorType, int totalplates, int typeofplate) // to ca
 	float diff;
 	do
 	{
-		cout << "Do you plan to expand your solar capacity in the future? Please press 'Y' for Yes or 'N' for No: ";
+		cout << "Do you plan to expand your solar capacity in the future (Y/N)? ";
 		cin >> p;
 	} while (p != 'Y' && p != 'N');
 
@@ -339,9 +332,9 @@ float invertorsize(char invertorType, int totalplates, int typeofplate) // to ca
 	{
 		do
 		{
-			cout << "How many estimated KW would you need? Please provide the amount: ";
+			cout << "How many additional estimated KW would you require in the future? Please provide the amount: ";
 			cin >> estkw;
-		} while (estkw <= 0);
+		} while (estkw <= 0 || estkw > kw * 2); // doing this rn
 		kw = kw + estkw;
 		diff = static_cast<float>(kw) - static_cast<int>(kw);
 		if (diff == 0)
@@ -424,7 +417,7 @@ float costs(float invertorcosts, float platecost, float labourcosts, float other
 	char e;
 	do
 	{
-		cout << "Do you need protection from lightning by spending on earthing? Please press 'Y' for Yes or 'N' for No: ";
+		cout << "Do you require earthing to protect your appliances from lightning? (Y/N) ";
 		cin >> e;
 	} while (e != 'Y' && e != 'N');
 	if (e == 'Y')
@@ -464,7 +457,7 @@ bool login()
 	cout << "Please enter your username: ";
 	cin >> logusername;
 	bool usernameExist = false;
-	for (int i = 0; i < profile_number; i++){
+	for (int i = 0; i < profile_number; i++) {
 		if (logusername == usernames[i]) {
 			usernameExist = true;
 		}
@@ -478,7 +471,7 @@ bool login()
 		cout << "PLEASE FILL OUT THE FORM TO RECEIVE AN ACCURATE ESTIMATION OF YOUR SOLAR PANEL REQUIREMENTS. ENSURE THAT YOU PROVIDE PRECISE DETAILS AND FIGURES FOR THE MOST RELIABLE RESULTS. FEEL FREE TO VERIFY YOUR VALUES AGAINST YOUR ELECTRICITY BILLS OR CONSULT WITH A TRUSTED ADVISOR IF NEEDED. " << endl << endl << endl << endl << endl;
 		return true;
 	}
-
+	return false;
 }
 
 void createaccount()
@@ -510,33 +503,42 @@ void createaccount()
 	outData << "Name: " << forename << " " << surname << endl;
 	outData.close();
 }
-
+bool checkFile() {
+	ifstream inData("profiles.txt");
+	if (!inData) {
+		cout << "File doesnt exist. Try another option.\n";
+		return false;
+	}
+	inData.close();
+	return true;
+}
 bool addToFile(int rooms, int plates_requirement, int money_saved, int invertor_cost, int plate_cost, int stand_cost, int labour_cost, int battery_cost, int other_costs, int total_cost) {
-	ofstream outData; 
-	
+	ofstream outData;
+
 	outData.open("profiles.txt", ios::app);
 	outData << "Size of house: " << area << " Kanal " << endl;
 	outData << "Number of rooms: " << rooms << endl;
 	outData << "Number of Appliances: " << totalapp << endl;
 	outData << "Number of plates required: " << plates_requirement << endl;
-	outData << "Money saved in bills: PKR " << money_saved << endl;
-	outData << "Invertor Cost: PKR " << invertor_cost << endl;
-	outData << "Plates cost: PKR " << plate_cost << endl;
-	outData << "Stand cost: PKR " << stand_cost << endl;
-	outData << "Labour cost: PKR " << labour_cost << endl;
-	outData << "Battery cost: PKR " << battery_cost << endl;
-	outData << "Other costs: PKR " << other_costs << endl;
-	outData << "Total cost has ammounted to: PKR " << total_cost << endl;
+	outData << "Invertor Cost: " << invertor_cost << " PKR" << endl;
+	outData << "Plates cost: " << plate_cost << " PKR" << endl;
+	outData << "Stand cost: " << stand_cost << " PKR" << endl;
+	outData << "Labour cost: " << labour_cost << " PKR" << endl;
+	outData << "Battery cost: " << battery_cost << " PKR" << endl;
+	outData << "Other costs: " << other_costs << " PKR" << endl;
+	outData << "Total cost has ammounted to: " << total_cost << " PKR" << endl;
+	outData << "Money saved in bills: " << money_saved << " PKR" << endl;
 	outData.close();
-	
+
 	return true;
 }
 
 void SolarCalc(int profile) {
-	float total_energy_usage, watt_hr_requirement, roof_size, invertor_size, Ongrid_invertor_size, Hybrid_invertor_size, invertor_cost, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, total_cost, money_saved;
+	float total_energy_usage, watt_hr_requirement, roof_size, invertor_size, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, money_saved;
+
 	char house, invertor_type;
 
-	int rooms, sun_hours, plate_type, plates_requirement, check, addacc;
+	int rooms, sun_hours, plate_type, plates_requirement, check, addacc, total_cost, Ongrid_invertor_size, Hybrid_invertor_size{}, invertor_cost;
 
 	do
 	{
@@ -547,25 +549,13 @@ void SolarCalc(int profile) {
 		area = marla();
 	else
 		area = kanal();
-
-
 	rooms = checkRoom();
-
 	total_energy_usage = energyHeavyTotal() + energyLightTotal(rooms);
-	cout << "Your total energy usage in Watt Hours is " << total_energy_usage << endl;     // remove after
-	cout << "Your units consumed per month are: " << total_energy_usage / 1000 << endl;     // remove after
-
-
-	cout << "calculating solar requirements:\n "; // will remove this line later
 	sun_hours = getSunpeakhours();
 	watt_hr_requirement = calculationofWh(sun_hours, total_energy_usage);
 	roof_size = roofsize();
-	cout << roof_size; // remove after
 	plate_type = platetype();
-	cout << plate_type; // remove after
 	plates_requirement = calculationofplates(watt_hr_requirement, roof_size, plate_type);
-	cout << "number of solar plates required are " << plates_requirement << endl; // remove after
-
 	invertor_type = Invertortype();
 	invertor_size = invertorsize(invertor_type, plates_requirement, plate_type);
 	if (invertor_type == 'H') {
@@ -582,17 +572,7 @@ void SolarCalc(int profile) {
 	battery_cost = batterycosts();
 	other_costs = othercosts(plates_requirement);
 	total_cost = costs(invertor_cost, plate_cost, labour_cost, other_costs, battery_cost, stand_cost);
-	cout << "invertor_cost " << invertor_cost << endl;
-	cout << "plate_cost " << plate_cost << endl;
-	cout << "stand_cost " << stand_cost << endl;
-	cout << "labour_cost " << labour_cost << endl;
-	cout << "battery_cost " << battery_cost << endl;
-	cout << "other_costs " << other_costs << endl;
-	cout << "total_cost " << total_cost << endl;
-
 	money_saved = moneysaved(total_energy_usage);
-
-	cout << "By using this solar arrangement you can save PKR" << money_saved << "." << endl;
 	bool flag = addToFile(rooms, plates_requirement, money_saved, invertor_cost, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, total_cost);
 	if (flag)
 		cout << "Added to file successfully.\n";
@@ -603,10 +583,9 @@ void SolarCalc(int profile) {
 
 int main() {
 	int option;
-
-
+	bool fileExist = false, loginCheck;
 	cout << "WELCOME TO THE SOLAR PANEL ESTIMATOR\n\n\n";
-	while (true){
+	while (true) {
 		option = userOption();
 		switch (option)
 		{
@@ -621,13 +600,14 @@ int main() {
 			// views all profiles
 			// ask for pw and username
 			// check file, if doesnt exist then print No profiles exist and ask options 1-5 again
-			ofstream inData("profiles.txt");
-			if (!inData) {
-				cout << "File doesnt exist. Try another option.\n";
+			if (!checkFile())
 				break;
+			if (!login()) {
+				cout << "Failed to Login.";
 			}
-			login();
-			
+
+
+
 			break;
 		case 3:
 			// updates a profile
@@ -652,6 +632,7 @@ int main() {
 			return 0;
 		}
 	}
+
 
 	return 0;
 }
