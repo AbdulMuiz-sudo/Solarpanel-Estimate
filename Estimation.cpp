@@ -1,10 +1,11 @@
+
 #include <iostream>
 #include<fstream>
 using namespace std;
 
-int battery, addstandcost = 0,totalapp=0;
+int battery, addstandcost = 0, totalapp = 0;
 float area, totalpower, totalHeavyEnergy, totalLightEnergy, kw;
-string surname, lastname, username,email, password, confirmpassword,logusername,logpassword;
+string surname, lastname, username, password, confirmpassword, logusername, logpassword;
 
 float marla() {
 	// returns Kanals
@@ -57,7 +58,7 @@ float energyCars(float noOfCars) {
 }
 float energyFridge(float noOfFridge) {
 	// returns energy in Wh used by all refrigerators
-	return 600 * noOfFridge * 24 * 30;
+	return 400 * noOfFridge * 24 * 30;
 }
 float energyAC(float noOfAC) {
 	// returns energy in Wh used by all AC's
@@ -68,7 +69,7 @@ float energyAC(float noOfAC) {
 		cin >> time;
 	} while (time < 0 || time>24);
 
-	return 1300 * noOfAC * time * 30;
+	return 1200 * noOfAC * time * 30;
 }
 float energyMiscHeavy(float misHeavyAppliances) {
 	// returns energy in Wh used by miscellaneous appliances
@@ -449,9 +450,9 @@ float energysaved(float total_energy)
 	float billsaved = (total_energy / 1000) * 64;
 	return billsaved;
 }
-void login() 
+void login()
 {
-	cout << "WELCOME:  " << surname<<" "<<lastname << endl << endl;
+	cout << "WELCOME:  " << surname << " " << lastname << endl << endl;
 	cout << "PLease complete the following fields to successfuly log in to your account: \n\n";
 	do
 	{
@@ -462,34 +463,28 @@ void login()
 		cout << "Please enter the password: ";
 		cin >> logpassword;
 	} while (logpassword != password);
-	cout << "WELCOME USER: " << username<<endl<<endl<<endl;
+	cout << "WELCOME USER: " << username << endl << endl << endl;
 	cout << "PLEASE FILL OUT THE FORM TO RECEIVE AN ACCURATE ESTIMATION OF YOUR SOLAR PANEL REQUIREMENTS. ENSURE THAT YOU PROVIDE PRECISE DETAILS AND FIGURES FOR THE MOST RELIABLE RESULTS. FEEL FREE TO VERIFY YOUR VALUES AGAINST YOUR ELECTRICITY BILLS OR CONSULT WITH A TRUSTED ADVISOR IF NEEDED. " << endl << endl << endl << endl << endl;
 }
-
-
-
-
 
 void createaccount()
 {
 	int log;
 	cout << "CREATE AN ACCOUNT\n\n";
 	cout << "Please complete the following fields to successfully set up your account. Ensure all information provided is accurate to proceed smoothly with the setup process\n";
-	cout <<endl<< "Please enter your surname: ";
+	cout << endl << "Please enter your surname: ";
 	cin >> surname;
-	cout <<endl<<"Please enter your last name: ";
+	cout << endl << "Please enter your last name: ";
 	cin >> lastname;
-	cout <<endl<< "Please enter a valid e-mail address: ";
-	cin >> email;
-	cout <<endl<< "Please enter your desired username as it will appear on your profile: ";
+	cout << endl << "Please enter your desired username as it will appear on your profile: ";
 	cin >> username;
-	cout <<endl<< "Please create a secure password for your account: ";
+	cout << endl << "Please create a secure password for your account: ";
 	cin >> password;
 	do {
 		cout << "Re-enter your password for confirmation: ";
 		cin >> confirmpassword;
 	} while (password != confirmpassword);
-	cout <<endl<< "Congratulations! Your account has been successfully set up.\n\n";
+	cout << endl << "Congratulations! Your account has been successfully set up.\n\n";
 	do {
 		cout << "Now Press 1 to log in to your account:";
 		cin >> log;
@@ -502,85 +497,86 @@ void createaccount()
 
 
 int main() {
-	
-		float total_energy_usage, watt_hr_requirement, roof_size, invertor_size, Ongrid_invertor_size, Hybrid_invertor_size, invertor_cost, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, total_cost, energy_saved;
-		char house, invertor_type;
 
-		int rooms, sun_hours, plate_type, plates_requirement, check,addacc;
+	float  watt_hr_requirement, roof_size, invertor_size, Ongrid_invertor_size, Hybrid_invertor_size, invertor_cost, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, energy_saved;
+	char house, invertor_type;
 
-		cout << "WELCOME TO THE SOLAR PANEL ESTIMATOR\n\n\n";
-		do {
-			cout << "Press 1 to Create an Account: ";
-			cin >> check;
-		} while (check != 1);
-		cout << endl;
-		createaccount();
+	int rooms, sun_hours, plate_type, plates_requirement, check, addacc, total_energy_usage, total_cost;
 
-
-		do
-		{
-			cout << "Please enter house measurement unit (M or Marla or K for Kanal): ";
-			cin >> house;
-		} while (house != 'K' && house != 'M');
-		if (house == 'M')
-			area = marla();
-		else
-			area = kanal();
+	cout << "WELCOME TO THE SOLAR PANEL ESTIMATOR\n\n\n";
+	do {
+		cout << "Press 1 to Create an Account: ";
+		cin >> check;
+	} while (check != 1);
+	cout << endl;
+	createaccount();
 
 
-		rooms = checkRoom();
+	do
+	{
+		cout << "Please enter house measurement unit (M or Marla or K for Kanal): ";
+		cin >> house;
+	} while (house != 'K' && house != 'M');
+	if (house == 'M')
+		area = marla();
+	else
+		area = kanal();
 
-		total_energy_usage = energyHeavyTotal() + energyLightTotal(rooms);
-		cout << "Your total energy usage in Watt Hours is " << total_energy_usage << endl;     // remove after
-		cout << "Your units consumed per month are: " << total_energy_usage / 1000 << endl;     // remove after
+
+	rooms = checkRoom();
+
+	total_energy_usage = energyHeavyTotal() + energyLightTotal(rooms);
+	cout << "Your total energy usage in Watt Hours is " << total_energy_usage << endl;     // remove after
+	cout << "Your units consumed per month are: " << total_energy_usage / 1000 << endl;     // remove after
 
 
-		cout << "calculating solar requirements:\n "; // will remove this line later
-		sun_hours = getSunpeakhours();
-		watt_hr_requirement = calculationofWh(sun_hours, total_energy_usage);
-		roof_size = roofsize();
-		cout << roof_size; // remove after
-		plate_type = platetype();
-		cout << plate_type; // remove after
-		plates_requirement = calculationofplates(watt_hr_requirement, roof_size, plate_type);
-		cout << "number of solar plates required are " << plates_requirement<<endl; // remove after
+	cout << "calculating solar requirements:\n "; // will remove this line later
+	sun_hours = getSunpeakhours();
+	watt_hr_requirement = calculationofWh(sun_hours, total_energy_usage);
+	roof_size = roofsize();
+	cout << roof_size; // remove after
+	plate_type = platetype();
+	cout << plate_type; // remove after
+	plates_requirement = calculationofplates(watt_hr_requirement, roof_size, plate_type);
+	cout << "number of solar plates required are " << plates_requirement << endl; // remove after
 
-		invertor_type = Invertortype();
-		invertor_size = invertorsize(invertor_type, plates_requirement, plate_type);
-		if (invertor_type == 'H') {
-			Hybrid_invertor_size = getHybridDiv(invertor_size);
-			Ongrid_invertor_size = getOngridDiv(invertor_size, invertor_type, Hybrid_invertor_size);
-		}
-		else {
-			Ongrid_invertor_size = getOngridDiv(invertor_size, invertor_type, 0);
-		}
-		invertor_cost = invertorcosts(Ongrid_invertor_size, Hybrid_invertor_size, invertor_type);
-		plate_cost = platecost(plates_requirement, plate_type);
-		stand_cost = standcost(plates_requirement);
-		labour_cost = labourcosts();
-		battery_cost = batterycosts();
-		other_costs = othercosts(plates_requirement);
-		total_cost = costs(invertor_cost, plate_cost, labour_cost, other_costs, battery_cost, stand_cost);
-		cout << "invertor_cost " << invertor_cost << endl;
-		cout << "plate_cost " << plate_cost << endl;
-		cout << "stand_cost " << stand_cost << endl;
-		cout << "labour_cost " << labour_cost << endl;
-		cout << "battery_cost " << battery_cost << endl;
-		cout << "other_costs " << other_costs << endl;
-		cout << "total_cost " << total_cost << endl;
+	invertor_type = Invertortype();
+	invertor_size = invertorsize(invertor_type, plates_requirement, plate_type);
+	if (invertor_type == 'H') {
+		Hybrid_invertor_size = getHybridDiv(invertor_size);
+		Ongrid_invertor_size = getOngridDiv(invertor_size, invertor_type, Hybrid_invertor_size);
+	}
+	else {
+		Ongrid_invertor_size = getOngridDiv(invertor_size, invertor_type, 0);
+	}
+	invertor_cost = invertorcosts(Ongrid_invertor_size, Hybrid_invertor_size, invertor_type);
+	plate_cost = platecost(plates_requirement, plate_type);
+	stand_cost = standcost(plates_requirement);
+	labour_cost = labourcosts();
+	battery_cost = batterycosts();
+	other_costs = othercosts(plates_requirement);
+	total_cost = costs(invertor_cost, plate_cost, labour_cost, other_costs, battery_cost, stand_cost);
+	cout << "invertor_cost " << invertor_cost << endl;
+	cout << "plate_cost " << plate_cost << endl;
+	cout << "stand_cost " << stand_cost << endl;
+	cout << "labour_cost " << labour_cost << endl;
+	cout << "battery_cost " << battery_cost << endl;
+	cout << "other_costs " << other_costs << endl;
+	cout << "total_cost " << total_cost << endl;
 
-		energy_saved = energysaved(watt_hr_requirement);
+	energy_saved = energysaved(total_energy_usage);
 
-		cout << "By using this solar arrangement you can save " << energy_saved << " watt hours.";
-		ofstream output;
-		output.open("profiles.txt");
-		output << " Number of rooms: " << rooms;
-		output << " , Size of house: " << area << " Kanal ";
-		output << " , Number of Appliances: " << totalapp;
-		output << " , Number of plates required: " << plates_requirement;
-		output << " , Energy saved in Watt Hours: " << energy_saved;
-		output.close();
-		
+	cout << "By using this solar arrangement you can save " << energy_saved;
+	ofstream output;
+	output.open("profiles.txt");
+	output << "Username: " << username << endl;
+	output << "Number of rooms: " << rooms<<endl;
+	output << "Size of house: " << area << " Kanal \n";
+	output << "Number of Appliances: " << totalapp<<endl;
+	output << "Number of plates required: " << plates_requirement<<endl;
+	output << "Total cost of installing plates(PKR): " << total_cost << endl;
+	output << "You can save up to (PKR): " << energy_saved<<" monthly." << endl;
+	output.close();
+
 	return 0;
 }
-
