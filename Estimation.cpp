@@ -1,11 +1,12 @@
-
 #include <iostream>
 #include<fstream>
 using namespace std;
 
 int battery, addstandcost = 0, totalapp = 0;
 float area, totalpower, totalHeavyEnergy, totalLightEnergy, kw;
-string surname, lastname, username, password, confirmpassword, logusername, logpassword;
+string forename, surname, username, password, confirmpassword, logusername, logpassword;
+string usernames[1000], passwords[1000];
+int profile_number = 0;
 
 float marla() {
 	// returns Kanals
@@ -26,11 +27,10 @@ float kanal() {
 	{
 		cout << "Enter size of house in Kanal: ";
 		cin >> kanalsize;
-	} while (kanalsize <= 0);
+	} while (kanalsize <= 0 || kanalsize > 12);
 
 	return kanalsize;
 }
-
 int checkRoom() {
 	// return number of rooms that use electricity 
 	int rooms;
@@ -41,7 +41,6 @@ int checkRoom() {
 
 	return rooms;
 }
-
 // heavy Appliances 1) ask number 2) return their energies
 float energyCars(float noOfCars) {
 	// returns energy in Wh used by all electric cars
@@ -58,7 +57,7 @@ float energyCars(float noOfCars) {
 }
 float energyFridge(float noOfFridge) {
 	// returns energy in Wh used by all refrigerators
-	return 400 * noOfFridge * 24 * 30;
+	return 600 * noOfFridge * 24 * 30;
 }
 float energyAC(float noOfAC) {
 	// returns energy in Wh used by all AC's
@@ -69,7 +68,7 @@ float energyAC(float noOfAC) {
 		cin >> time;
 	} while (time < 0 || time>24);
 
-	return 1200 * noOfAC * time * 30;
+	return 1300 * noOfAC * time * 30;
 }
 float energyMiscHeavy(float misHeavyAppliances) {
 	// returns energy in Wh used by miscellaneous appliances
@@ -90,25 +89,25 @@ float energyHeavyTotal() {
 	{
 		cout << "Enter number of electric car(s) you wish to charge: ";
 		cin >> car;
-	} while (car < 0);
+	} while (car < 0 || car>static_cast<int>(area * 5));
 	energy_car = energyCars(car);
 	do
 	{
 		cout << "Enter number of refrigerators used by the entire house: ";
 		cin >> refrigerators;
-	} while (refrigerators < 0);
+	} while (refrigerators < 0 || refrigerators> area * 6);
 	energy_fridge = energyFridge(refrigerators);
 	do
 	{
 		cout << "Enter number of Air conditioners actively used by the entire house: ";
 		cin >> ac;
-	} while (ac < 0);
+	} while (ac < 0 || ac> area * 12);
 	energy_AC = energyAC(ac);
 	do
 	{
 		cout << "Enter number of heavy miscellaneous appliances used: ";
 		cin >> mischeavy;
-	} while (mischeavy < 0);
+	} while (mischeavy < 0 || mischeavy > 50);
 	energy_mis_heavy = energyMiscHeavy(mischeavy);
 	totalapp = car + mischeavy + ac + refrigerators;
 	return energy_car + energy_fridge + energy_AC + energy_mis_heavy;
@@ -174,11 +173,7 @@ float energyLightTotal(int rooms) {
 	totalapp = totalapp + miscsmall + total_fans + total_lights;
 	return energy_Fans + energy_Lights + energy_mis_small;
 }
-
-
-
 // solar panels
-
 int getSunpeakhours() // to calculate the peak sun hours per day
 {
 	// returns sun hours 
@@ -202,11 +197,12 @@ float calculationofWh(int sunhours, float total_energy) // to calculate the ener
 float roofsize() // the roof area of the house in sq feet
 {
 	float roofSqFt;
+	cout << "According to Pakistani bylaws, 1 Kanal has a 1300 sqft roof and 10 Marla has a 1150 sqft roof." << endl;
 	do
 	{
 		cout << "Please enter the roof size in square feet: ";
 		cin >> roofSqFt;
-	} while (roofSqFt <= 0 || roofSqFt > 108900);
+	} while (roofSqFt <= 0 || roofSqFt >= area * 5445 * 0.5); // area in kanal multiplied by sqft in 1 kanal multiplied by average ratio between roof and plot size
 	return roofSqFt;
 }
 int platetype() // returns the plate type
@@ -221,7 +217,6 @@ int platetype() // returns the plate type
 	} while (typeofplate != 575 && typeofplate != 595);
 	return typeofplate;
 }
-
 int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) // to calculate the plates required
 {
 	int totalplates, n;
@@ -422,7 +417,6 @@ float othercosts(int totalplates) // to calculate other costs like wires etc
 	float othercosts = totalplates * 200;
 	return othercosts;
 }
-
 float costs(float invertorcosts, float platecost, float labourcosts, float othercosts, float batterycosts, float standcost) // to calculate the total cost of the solar system
 {
 	float totalcost;
@@ -443,28 +437,46 @@ float costs(float invertorcosts, float platecost, float labourcosts, float other
 
 	return totalcost;
 }
-
-
-float energysaved(float total_energy)
+float moneysaved(float total_energy)
 {
 	float billsaved = (total_energy / 1000) * 64;
 	return billsaved;
 }
-void login()
-{
-	cout << "WELCOME:  " << surname << " " << lastname << endl << endl;
-	cout << "PLease complete the following fields to successfuly log in to your account: \n\n";
+
+// profile management
+int userOption() {
+	int option;
+	cout << "1: Create New Profile \n2: View All Profiles \n3: Update Profile \n4: Delete Profile \n5: Exit\n";
 	do
 	{
-		cout << "Please enter the username: ";
-		cin >> logusername;
-	} while (logusername != username);
-	do {
-		cout << "Please enter the password: ";
-		cin >> logpassword;
-	} while (logpassword != password);
-	cout << "WELCOME USER: " << username << endl << endl << endl;
-	cout << "PLEASE FILL OUT THE FORM TO RECEIVE AN ACCURATE ESTIMATION OF YOUR SOLAR PANEL REQUIREMENTS. ENSURE THAT YOU PROVIDE PRECISE DETAILS AND FIGURES FOR THE MOST RELIABLE RESULTS. FEEL FREE TO VERIFY YOUR VALUES AGAINST YOUR ELECTRICITY BILLS OR CONSULT WITH A TRUSTED ADVISOR IF NEEDED. " << endl << endl << endl << endl << endl;
+		cout << "Please select an option from 1 to 5: ";
+		cin >> option;
+	} while (option < 1 || option>5);
+	return option;
+}
+void login()
+{
+	cout << "WELCOME:  " << forename << " " << surname << endl << endl;
+	cout << "PLease complete the following fields to successfuly log in to your account: \n\n";
+	// check in array
+	// if not there, username desnt exist 
+	cout << "Please enter your username: ";
+	cin >> logusername;
+	bool usernameExist = false;
+	for (int i = 0; i < profile_number; i++){
+		if (logusername == usernames[i]) {
+			usernameExist = true;
+		}
+	}
+	if (usernameExist) {
+		do {
+			cout << "Please enter the password: ";
+			cin >> logpassword;
+		} while (logpassword != password);
+		cout << "WELCOME USER: " << username << endl << endl << endl;
+		cout << "PLEASE FILL OUT THE FORM TO RECEIVE AN ACCURATE ESTIMATION OF YOUR SOLAR PANEL REQUIREMENTS. ENSURE THAT YOU PROVIDE PRECISE DETAILS AND FIGURES FOR THE MOST RELIABLE RESULTS. FEEL FREE TO VERIFY YOUR VALUES AGAINST YOUR ELECTRICITY BILLS OR CONSULT WITH A TRUSTED ADVISOR IF NEEDED. " << endl << endl << endl << endl << endl;
+	}
+
 }
 
 void createaccount()
@@ -472,11 +484,11 @@ void createaccount()
 	int log;
 	cout << "CREATE AN ACCOUNT\n\n";
 	cout << "Please complete the following fields to successfully set up your account. Ensure all information provided is accurate to proceed smoothly with the setup process\n";
-	cout << endl << "Please enter your surname: ";
+	cout << endl << "Please enter your forename: ";   // add in file
+	cin >> forename;
+	cout << endl << "Please enter your surname: ";		// add in file
 	cin >> surname;
-	cout << endl << "Please enter your last name: ";
-	cin >> lastname;
-	cout << endl << "Please enter your desired username as it will appear on your profile: ";
+	cout << endl << "Please enter your desired username as it will appear on your profile: ";	//add in global array
 	cin >> username;
 	cout << endl << "Please create a secure password for your account: ";
 	cin >> password;
@@ -484,33 +496,45 @@ void createaccount()
 		cout << "Re-enter your password for confirmation: ";
 		cin >> confirmpassword;
 	} while (password != confirmpassword);
-	cout << endl << "Congratulations! Your account has been successfully set up.\n\n";
-	do {
-		cout << "Now Press 1 to log in to your account:";
-		cin >> log;
-	} while (log != 1);
-	login();
 
+	usernames[profile_number] = username;
+	passwords[profile_number] = password;
+
+	profile_number++;
+	cout << endl << "Congratulations! Your account has been successfully set up.\n\n";
+	ofstream outData;
+	outData.open("profiles.txt", ios::app);
+	outData << "Profile1: " << username << endl;
+	outData << "Name: " << forename << " " << surname << endl;
+	outData.close();
 }
 
+bool addToFile(int rooms, int plates_requirement, int money_saved, int invertor_cost, int plate_cost, int stand_cost, int labour_cost, int battery_cost, int other_costs, int total_cost) {
+	ofstream outData; 
+	
+	outData.open("profiles.txt", ios::app);
+	outData << "Size of house: " << area << " Kanal " << endl;
+	outData << "Number of rooms: " << rooms << endl;
+	outData << "Number of Appliances: " << totalapp << endl;
+	outData << "Number of plates required: " << plates_requirement << endl;
+	outData << "Money saved in bills: PKR " << money_saved << endl;
+	outData << "Invertor Cost: PKR " << invertor_cost << endl;
+	outData << "Plates cost: PKR " << plate_cost << endl;
+	outData << "Stand cost: PKR " << stand_cost << endl;
+	outData << "Labour cost: PKR " << labour_cost << endl;
+	outData << "Battery cost: PKR " << battery_cost << endl;
+	outData << "Other costs: PKR " << other_costs << endl;
+	outData << "Total cost has ammounted to: PKR " << total_cost << endl;
+	outData.close();
+	
+	return true;
+}
 
-
-
-int main() {
-
-	float  watt_hr_requirement, roof_size, invertor_size, Ongrid_invertor_size, Hybrid_invertor_size, invertor_cost, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, energy_saved;
+void SolarCalc(int profile) {
+	float total_energy_usage, watt_hr_requirement, roof_size, invertor_size, Ongrid_invertor_size, Hybrid_invertor_size, invertor_cost, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, total_cost, money_saved;
 	char house, invertor_type;
 
-	int rooms, sun_hours, plate_type, plates_requirement, check, addacc, total_energy_usage, total_cost;
-
-	cout << "WELCOME TO THE SOLAR PANEL ESTIMATOR\n\n\n";
-	do {
-		cout << "Press 1 to Create an Account: ";
-		cin >> check;
-	} while (check != 1);
-	cout << endl;
-	createaccount();
-
+	int rooms, sun_hours, plate_type, plates_requirement, check, addacc;
 
 	do
 	{
@@ -564,19 +588,72 @@ int main() {
 	cout << "other_costs " << other_costs << endl;
 	cout << "total_cost " << total_cost << endl;
 
-	energy_saved = energysaved(total_energy_usage);
+	money_saved = moneysaved(total_energy_usage);
 
-	cout << "By using this solar arrangement you can save " << energy_saved;
-	ofstream output;
-	output.open("profiles.txt");
-	output << "Username: " << username << endl;
-	output << "Number of rooms: " << rooms<<endl;
-	output << "Size of house: " << area << " Kanal \n";
-	output << "Number of Appliances: " << totalapp<<endl;
-	output << "Number of plates required: " << plates_requirement<<endl;
-	output << "Total cost of installing plates(PKR): " << total_cost << endl;
-	output << "You can save up to (PKR): " << energy_saved<<" monthly." << endl;
-	output.close();
+	cout << "By using this solar arrangement you can save PKR" << money_saved << "." << endl;
+	bool flag = addToFile(rooms, plates_requirement, money_saved, invertor_cost, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, total_cost);
+	if (flag)
+		cout << "Added to file successfully.\n";
+	else
+		cout << "Failed to add to file.\n";
+	return;
+}
+
+int main() {
+	int option;
+
+
+	cout << "WELCOME TO THE SOLAR PANEL ESTIMATOR\n\n\n";
+	while (true){
+		option = userOption();
+		switch (option)
+		{
+		case 1:
+			// creates a new profile
+			createaccount();
+			login();
+			SolarCalc(profile_number - 1);
+
+			break;
+		case 2:
+			ofstream inData("profiles.txt");
+			if (!inData) {
+				cout << "File doesnt exist. Try another option.\n";
+				break;
+			}
+			login();
+			// views all profiles
+			// ask for pw and username
+			// check file, if doesnt exist then print No profiles exist and ask options 1-5 again
+			break;
+		case 3:
+			// updates a profile
+			// ask for pw and username
+			// check file, if doesnt exist then print No profiles exist and ask options 1-5 again
+			// if it exists, ask which profile in file
+
+
+			break;
+		case 4:
+			// deletes profile
+			// ask for pw and username
+			// check file, 
+				// if doesnt exist then print No profiles exist and ask options 1-5 again
+				// if exists, ask which profile in file
+					// if profile doesnt exists, print no profile
+					// else confirm deletion
+
+			break;
+		case 5:
+			// exit program
+			return 0;
+		}
+	}
+
+	
+
+
+	
 
 	return 0;
 }
