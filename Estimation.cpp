@@ -3,11 +3,11 @@
 #include<string>
 using namespace std;
 
-int battery, addstandcost = 0, totalapp = 0;
+int battery, addstandcost = 0, totalapp = 0,profile_number = 0, earthing=0;
 float area, totalpower, totalHeavyEnergy, totalLightEnergy, kw;
 string forename, surname, username, password, confirmpassword, logusername, logpassword;
 string usernames[1000], passwords[1000];
-int profile_number = 0;
+ 
 
 float marla() {
 	// returns Kanals
@@ -58,7 +58,7 @@ float energyCars(float noOfCars) {
 }
 float energyFridge(float noOfFridge) {
 	// returns energy in Wh used by all refrigerators
-	return 600 * noOfFridge * 24 * 30;
+	return 400 * noOfFridge * 24 * 30;
 }
 float energyAC(float noOfAC) {
 	// returns energy in Wh used by all AC's
@@ -69,7 +69,7 @@ float energyAC(float noOfAC) {
 		cin >> time;
 	} while (time < 0 || time>24);
 
-	return 1300 * noOfAC * time * 30;
+	return 1200 * noOfAC * time * 30;
 }
 float energyMiscHeavy(float misHeavyAppliances) {
 	// returns energy in Wh used by miscellaneous appliances
@@ -415,6 +415,7 @@ float costs(float invertorcosts, float platecost, float labourcosts, float other
 {
 	float totalcost;
 	char e;
+
 	do
 	{
 		cout << "Do you require earthing to protect your appliances from lightning? (Y/N) ";
@@ -422,6 +423,7 @@ float costs(float invertorcosts, float platecost, float labourcosts, float other
 	} while (e != 'Y' && e != 'N');
 	if (e == 'Y')
 	{
+		earthing = 25000;
 		totalcost = invertorcosts + platecost + labourcosts + othercosts + batterycosts + standcost + 25000;
 	}
 	else
@@ -456,6 +458,7 @@ bool login()
 	// if not there, username desnt exist 
 	cout << "Please enter your username: ";
 	cin >> logusername;
+	cout << endl;
 	bool usernameExist = false;
 	for (int i = 0; i < profile_number; i++) {
 		if (logusername == usernames[i]) {
@@ -525,6 +528,7 @@ bool addToFile(int rooms, int plates_requirement, int money_saved, int invertor_
 	outData << "Stand cost: " << stand_cost << " PKR" << endl;
 	outData << "Labour cost: " << labour_cost << " PKR" << endl;
 	outData << "Battery cost: " << battery_cost << " PKR" << endl;
+	outData << "Earthing cost: " << earthing << " PKR" << endl;
 	outData << "Other costs: " << other_costs << " PKR" << endl;
 	outData << "Total cost has ammounted to: " << total_cost << " PKR" << endl;
 	outData << "Money saved in bills: " << money_saved << " PKR" << endl;
@@ -575,11 +579,32 @@ void SolarCalc(int profile) {
 	money_saved = moneysaved(total_energy_usage);
 	bool flag = addToFile(rooms, plates_requirement, money_saved, invertor_cost, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, total_cost);
 	if (flag)
-		cout << "Added to file successfully.\n";
+		cout << "\n\n\nRECORD ADDED TO FILE SUCCESSFULY.\n\n\n";
 	else
-		cout << "Failed to add to file.\n";
+		cout << "\n\n\nRECORD WAS NOT ABLE TO BE ADDED IN TO THE FILE\n\n\n";
 	return;
 }
+
+void readfile()
+{
+	ifstream data("profiles.txt");
+	if (!data)
+	{
+		cout << "File does not exist";
+		return;
+	}
+	string line;
+	// Read file line by line
+    while (getline(data, line)) {
+			cout << line << endl; // Output each line to the console
+		}
+
+	data.close();
+
+}
+
+
+
 
 int main() {
 	int option;
@@ -595,16 +620,22 @@ int main() {
 			login();
 			SolarCalc(profile_number - 1);
 
+
 			break;
 		case 2:
 			// views all profiles
 			// ask for pw and username
 			// check file, if doesnt exist then print No profiles exist and ask options 1-5 again
-			if (!checkFile())
+			/*if (!checkFile())
 				break;
 			if (!login()) {
 				cout << "Failed to Login.";
-			}
+			}*/
+
+			login();
+
+
+			readfile();
 
 
 
