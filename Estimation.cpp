@@ -3,11 +3,11 @@
 #include<string>
 using namespace std;
 
-int battery, addstandcost = 0, totalapp = 0,profile_number = 0, earthing=0;
+int battery, addstandcost = 0, totalapp = 0, profile_number = 0, earthing = 0;
 float area, totalpower, totalHeavyEnergy, totalLightEnergy, kw;
 string forename, surname, username, password, confirmpassword, logusername, logpassword;
-string usernames[1000], passwords[1000];
- 
+const string adminUsername = "admin", adminPw = "abcd";
+
 
 float marla() {
 	// returns Kanals
@@ -309,8 +309,8 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 float invertorsize(char invertorType, int totalplates, int typeofplate) // to calculate the total size of the invertor
 {
 	char p;
-	float kw = (totalplates * typeofplate) / 1000;
-	float invertorsize;
+	float kw = (static_cast<float>(totalplates)*typeofplate) / 1000;
+	float invertorsize=0;
 	float estkw;
 	float diff;
 	do
@@ -452,34 +452,25 @@ int userOption() {
 }
 bool login()
 {
-	cout << "WELCOME:  " << forename << " " << surname << endl << endl;
-	cout << "PLease complete the following fields to successfuly log in to your account: \n\n";
-	// check in array
-	// if not there, username desnt exist 
+	cout << "PLease complete the following fields to proceed with your request\n\n";
+
 	cout << "Please enter your username: ";
 	cin >> logusername;
-	cout << endl;
-	bool usernameExist = false;
-	for (int i = 0; i < profile_number; i++) {
-		if (logusername == usernames[i]) {
-			usernameExist = true;
-		}
-	}
-	if (usernameExist) {
-		do {
-			cout << "Please enter the password: ";
-			cin >> logpassword;
-		} while (logpassword != password);
-		cout << "WELCOME USER: " << username << endl << endl << endl;
-		cout << "PLEASE FILL OUT THE FORM TO RECEIVE AN ACCURATE ESTIMATION OF YOUR SOLAR PANEL REQUIREMENTS. ENSURE THAT YOU PROVIDE PRECISE DETAILS AND FIGURES FOR THE MOST RELIABLE RESULTS. FEEL FREE TO VERIFY YOUR VALUES AGAINST YOUR ELECTRICITY BILLS OR CONSULT WITH A TRUSTED ADVISOR IF NEEDED. " << endl << endl << endl << endl << endl;
-		return true;
+	if (logusername == adminUsername) {
+		cout << "Please enter the password: ";
+		cin >> logpassword;
+		if (logpassword == adminPw)
+			return true;
 	}
 	return false;
-}
 
+
+	//cout << "WELCOME USER: " << username << endl << endl << endl;
+	//cout << "PLEASE FILL OUT THE FORM TO RECEIVE AN ACCURATE ESTIMATION OF YOUR SOLAR PANEL REQUIREMENTS. ENSURE THAT YOU PROVIDE PRECISE DETAILS AND FIGURES FOR THE MOST RELIABLE RESULTS. FEEL FREE TO VERIFY YOUR VALUES AGAINST YOUR ELECTRICITY BILLS OR CONSULT WITH A TRUSTED ADVISOR IF NEEDED. " << endl << endl << endl << endl << endl;
+	
+}
 void createaccount()
 {
-	int log;
 	cout << "CREATE AN ACCOUNT\n\n";
 	cout << "Please complete the following fields to successfully set up your account. Ensure all information provided is accurate to proceed smoothly with the setup process\n";
 	cout << endl << "Please enter your forename: ";   // add in file
@@ -488,15 +479,7 @@ void createaccount()
 	cin >> surname;
 	cout << endl << "Please enter your desired username as it will appear on your profile: ";	//add in global array
 	cin >> username;
-	cout << endl << "Please create a secure password for your account: ";
-	cin >> password;
-	do {
-		cout << "Re-enter your password for confirmation: ";
-		cin >> confirmpassword;
-	} while (password != confirmpassword);
 
-	usernames[profile_number] = username;
-	passwords[profile_number] = password;
 
 	profile_number++;
 	cout << endl << "Congratulations! Your account has been successfully set up.\n\n";
@@ -537,13 +520,13 @@ bool addToFile(int rooms, int plates_requirement, int money_saved, int invertor_
 	return true;
 }
 
-void SolarCalc(int profile) {
+void SolarCalc() {
 	float total_energy_usage, watt_hr_requirement, roof_size, invertor_size, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, money_saved;
 
 	char house, invertor_type;
 
-	int rooms, sun_hours, plate_type, plates_requirement, check, addacc, total_cost, Ongrid_invertor_size, Hybrid_invertor_size{}, invertor_cost;
 
+	int rooms, sun_hours, plate_type, plates_requirement, total_cost, Ongrid_invertor_size, Hybrid_invertor_size{}, invertor_cost;
 	do
 	{
 		cout << "Please enter house measurement unit (M or Marla or K for Kanal): ";
@@ -595,9 +578,9 @@ void readfile()
 	}
 	string line;
 	// Read file line by line
-    while (getline(data, line)) {
-			cout << line << endl; // Output each line to the console
-		}
+	while (getline(data, line)) {
+		cout << line << endl; // Output each line to the console
+	}
 
 	data.close();
 
@@ -608,7 +591,7 @@ void readfile()
 
 int main() {
 	int option;
-	bool fileExist = false, loginCheck;
+	bool fileExist = false;
 	cout << "WELCOME TO THE SOLAR PANEL ESTIMATOR\n\n\n";
 	while (true) {
 		option = userOption();
@@ -617,27 +600,21 @@ int main() {
 		case 1:
 			// creates a new profile
 			createaccount();
-			login();
-			SolarCalc(profile_number - 1);
-
+			if (login())
+				SolarCalc();
+			else
+				cout << "Failed to login. Please select another option.";
 
 			break;
 		case 2:
 			// views all profiles
 			// ask for pw and username
 			// check file, if doesnt exist then print No profiles exist and ask options 1-5 again
-			/*if (!checkFile())
-				break;
-			if (!login()) {
-				cout << "Failed to Login.";
-			}*/
 
-			login();
-
-
-			readfile();
-
-
+			if(login())
+				readfile();
+			else
+				cout << "Failed to login. Please select another option.";
 
 			break;
 		case 3:
@@ -645,6 +622,18 @@ int main() {
 			// ask for pw and username
 			// check file, if doesnt exist then print No profiles exist and ask options 1-5 again
 			// if it exists, ask which profile in file
+			if (!login())
+				return false;
+			else{
+				string profileEditUsername;
+
+				cout << "Enter the profile you wish to update: ";
+				cin >> profileEditUsername;
+				// check profileEditUsername with other usernames
+
+
+
+			}
 
 
 			break;
