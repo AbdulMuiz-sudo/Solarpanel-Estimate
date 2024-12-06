@@ -310,8 +310,8 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 float invertorsize(char invertorType, int totalplates, int typeofplate) // to calculate the total size of the invertor
 {
 	char p;
-	float kw = (static_cast<float>(totalplates)*typeofplate) / 1000;
-	float invertorsize=0;
+	float kw = (static_cast<float>(totalplates) * typeofplate) / 1000;
+	float invertorsize = 0;
 	float estkw;
 	float diff;
 	do
@@ -464,25 +464,26 @@ bool login()
 			cout << "Successful login." << endl << endl;
 			return true;
 		}
-		else{
+		else {
 			cout << "Wrong admin password." << endl << endl;
 			return false;
 		}
-			
+
 	}
 	else {
 		cout << "Wrong admin username." << endl << endl;
 		return false;
 	}
-	
+
 
 
 	//cout << "WELCOME USER: " << username << endl << endl << endl;
 	//cout << "PLEASE FILL OUT THE FORM TO RECEIVE AN ACCURATE ESTIMATION OF YOUR SOLAR PANEL REQUIREMENTS. ENSURE THAT YOU PROVIDE PRECISE DETAILS AND FIGURES FOR THE MOST RELIABLE RESULTS. FEEL FREE TO VERIFY YOUR VALUES AGAINST YOUR ELECTRICITY BILLS OR CONSULT WITH A TRUSTED ADVISOR IF NEEDED. " << endl << endl << endl << endl << endl;
-	
+
 }
-void createaccount()
+string createaccount()
 {
+	string firstLine;
 	cout << "CREATE AN ACCOUNT\n\n";
 	cout << "Please complete the following fields to successfully set up your account. Ensure all information provided is accurate to proceed smoothly with the setup process\n\n";
 	cout << "Please enter your forename: ";   // add in file
@@ -493,10 +494,9 @@ void createaccount()
 
 	profile_number++;
 	cout << "\nCongratulations! Your account has been successfully set up.\n\n";
-	ofstream outData;
-	outData.open("profiles.txt", ios::app);
-	outData << "Profile Name: " << forename << " " << surname << endl;
-	outData.close();
+
+	firstLine = "Profile Name: " + forename + " " + surname;
+	return firstLine;
 }
 bool checkFile() {
 	ifstream inData("profiles.txt");
@@ -507,29 +507,8 @@ bool checkFile() {
 	inData.close();
 	return true;
 }
-bool addToFile(int rooms, int plates_requirement, int money_saved, int invertor_cost, int plate_cost, int stand_cost, int labour_cost, int battery_cost, int other_costs, int total_cost) {
-	ofstream outData;
 
-	outData.open("profiles.txt", ios::app);
-	outData << "Size of house: " << area << " Kanal " << endl;
-	outData << "Number of rooms: " << rooms << endl;
-	outData << "Number of Appliances: " << totalapp << endl;
-	outData << "Number of plates required: " << plates_requirement << endl;
-	outData << "Invertor Cost: " << invertor_cost << " PKR" << endl;
-	outData << "Plates cost: " << plate_cost << " PKR" << endl;
-	outData << "Stand cost: " << stand_cost << " PKR" << endl;
-	outData << "Labour cost: " << labour_cost << " PKR" << endl;
-	outData << "Battery cost: " << battery_cost << " PKR" << endl;
-	outData << "Earthing cost: " << earthing << " PKR" << endl;
-	outData << "Other costs: " << other_costs << " PKR" << endl;
-	outData << "Total cost has ammounted to: " << total_cost << " PKR" << endl;
-	outData << "Potential savings in bills: " << money_saved << " PKR" << endl << endl;
-	outData.close();
-
-	return true;
-}
-
-void SolarCalc() {
+void SolarCalc(string firstLine) {
 	float total_energy_usage, watt_hr_requirement, roof_size, invertor_size, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, money_saved;
 
 	char house, invertor_type;
@@ -569,11 +548,25 @@ void SolarCalc() {
 	other_costs = othercosts(plates_requirement);
 	total_cost = costs(invertor_cost, plate_cost, labour_cost, other_costs, battery_cost, stand_cost);
 	money_saved = moneysaved(total_energy_usage);
-	bool flag = addToFile(rooms, plates_requirement, money_saved, invertor_cost, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, total_cost);
-	if (flag)
-		cout << "\n\n\nRECORD ADDED TO FILE SUCCESSFULY.\n\n\n";
-	else
-		cout << "\n\n\nRECORD WAS NOT ABLE TO BE ADDED IN TO THE FILE\n\n\n";
+	ofstream outData;
+
+	outData.open("profiles.txt", ios::app);
+	outData << firstLine << endl;
+	outData << "Size of house: " << area << " Kanal " << endl;
+	outData << "Number of rooms: " << rooms << endl;
+	outData << "Number of Appliances: " << totalapp << endl;
+	outData << "Number of plates required: " << plates_requirement << endl;
+	outData << "Invertor Cost: " << invertor_cost << " PKR" << endl;
+	outData << "Plates cost: " << plate_cost << " PKR" << endl;
+	outData << "Stand cost: " << stand_cost << " PKR" << endl;
+	outData << "Labour cost: " << labour_cost << " PKR" << endl;
+	outData << "Battery cost: " << battery_cost << " PKR" << endl;
+	outData << "Earthing cost: " << earthing << " PKR" << endl;
+	outData << "Other costs: " << other_costs << " PKR" << endl;
+	outData << "Total cost has ammounted to: " << total_cost << " PKR" << endl;
+	outData << "Potential savings in bills: " << money_saved << " PKR" << endl << endl;
+	outData.close();
+	cout << "\n\n\nRECORD ADDED TO FILE SUCCESSFULY.\n\n\n";
 	return;
 }
 
@@ -613,18 +606,18 @@ bool nameExists(string name) {
 	inData.close();
 	return false;
 }
-void deleteProfile(string checkName){   // format of checkName is "Profile Name: firsName LastName"
+void deleteProfile(string checkName) {   // format of checkName is "Profile Name: firsName LastName"
 	string line;
 	ifstream inData("profiles.txt");
 	ofstream outData("temp.txt");
 	//ofstream tempFile("profiles.txt");
 	while (getline(inData, line)) {
 		if (line == checkName) {		// copy  13 lines
-			for (int i = 0; i < 14; i++){
+			for (int i = 0; i < 14; i++) {
 				getline(inData, line);
 			}
 		}
-		else{
+		else {
 			outData << line << endl;
 		}
 	}
@@ -645,22 +638,22 @@ void updateProfile(string checkName) {
 	string line;
 	ifstream inData("profiles.txt");
 	ofstream outData("temp.txt");
-	
+
 	while (getline(inData, line)) {
 		if (line == checkName) {		// copy  13 lines
 			for (int i = 0; i < 14; i++) {
 				getline(inData, line);
 			}
-			outData << checkName << endl;
-			SolarCalc();
 		}
 		else {
 			outData << line << endl;
 		}
 	}
-	// profiles copied to temp.txt
 	inData.close();
 	outData.close();
+	
+	// profiles copied to temp.txt
+	
 
 	ofstream outDataFinal("profiles.txt", ios::trunc);    // emptied contents of profile.txt
 	ifstream inDataFinal("temp.txt");
@@ -669,14 +662,16 @@ void updateProfile(string checkName) {
 	}
 	inDataFinal.close();
 	outDataFinal.close();
+
 	remove("temp.txt");
-	cout << "Profile deleted successfully" << endl;
+
+	SolarCalc(checkName);
 }
 
 int main() {
 	int option;
 	bool fileExist = false, nameExistence, flag;
-	string checkName;
+	string checkName, firstLine;
 	cout << "WELCOME TO THE SOLAR PANEL ESTIMATOR\n\n\n";
 	while (true) {
 		option = userOption();
@@ -684,8 +679,8 @@ int main() {
 		{
 		case 1:
 			// creates a new profile
-			createaccount();
-			SolarCalc();
+			firstLine = createaccount();
+			SolarCalc(firstLine);
 
 			break;
 		case 2:
@@ -693,7 +688,7 @@ int main() {
 			// ask for pw and username
 			// check file, if doesnt exist then print No profiles exist and ask options 1-5 again
 
-			if(login())
+			if (login())
 				readfile();
 			else
 				cout << "Failed to login. Please select another option." << endl << endl;
@@ -741,15 +736,14 @@ int main() {
 				cin >> forename;
 				cout << "Please enter your last name: ";
 				cin >> surname;
-				checkName =  "Profile Name: " + forename + " " + surname;
+				checkName = "Profile Name: " + forename + " " + surname;
 				nameExistence = nameExists(checkName);
 				if (!nameExistence) {
-					cout<<"Unable to delete profile. Please select another option." << endl << endl;
+					cout << "Unable to delete profile. Please select another option." << endl << endl;
 				}
 				else {
 					deleteProfile(checkName);
 				}
-
 
 			}
 			break;
@@ -758,7 +752,5 @@ int main() {
 			return 0;
 		}
 	}
-
-
 	return 0;
 }
