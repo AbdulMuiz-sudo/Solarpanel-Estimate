@@ -443,12 +443,12 @@ float moneysaved(float total_energy)
 // profile management
 int userOption() {
 	int option;
-	cout << "1: Create New Profile \n2: View All Profiles \n3: Update Profile \n4: Delete Profile \n5: Exit\n";
+	cout << "1: Create New Profile \n2: View All Profiles \n3: Update Profile \n4: Delete Profile \n5: Restore previous profile\n6: Exit\n";
 	do
 	{
-		cout << "Please select an option from 1 to 5: ";
+		cout << "Please select an option from 1 to 6: ";
 		cin >> option;
-	} while (option < 1 || option>5);
+	} while (option < 1 || option>6);
 	return option;
 }
 bool login()
@@ -567,6 +567,22 @@ void SolarCalc(string firstLine) {
 	outData << "Potential savings in bills: " << money_saved << " PKR" << endl << endl;
 	outData.close();
 	cout << "\n\n\nRECORD ADDED TO FILE SUCCESSFULY.\n\n\n";
+	outData.open("backup.txt", ios::app);
+	outData << firstLine << endl;
+	outData << "Size of house: " << area << " Kanal " << endl;
+	outData << "Number of rooms: " << rooms << endl;
+	outData << "Number of Appliances: " << totalapp << endl;
+	outData << "Number of plates required: " << plates_requirement << endl;
+	outData << "Invertor Cost: " << invertor_cost << " PKR" << endl;
+	outData << "Plates cost: " << plate_cost << " PKR" << endl;
+	outData << "Stand cost: " << stand_cost << " PKR" << endl;
+	outData << "Labour cost: " << labour_cost << " PKR" << endl;
+	outData << "Battery cost: " << battery_cost << " PKR" << endl;
+	outData << "Earthing cost: " << earthing << " PKR" << endl;
+	outData << "Other costs: " << other_costs << " PKR" << endl;
+	outData << "Total cost has ammounted to: " << total_cost << " PKR" << endl;
+	outData << "Potential savings in bills: " << money_saved << " PKR" << endl << endl;
+	outData.close();
 	return;
 }
 
@@ -606,10 +622,35 @@ bool nameExists(string name) {
 	inData.close();
 	return false;
 }
-void deleteProfile(string checkName) {   // format of checkName is "Profile Name: firsName LastName"
+void deleteProfile(string checkName)
+{  
+	char choice;
+	// format of checkName is "Profile Name: firsName LastName"
+	do
+	{
+		cout << "Are you sure you want to delete this profile ?(Y/N): ";
+		cin >> choice;
+	} while (choice!='Y'&&choice!='N');
+	if (choice == 'N')
+		return;
 	string line;
+	//backup profile content to backup.txt
 	ifstream inData("profiles.txt");
-	ofstream outData("temp.txt");
+	ofstream outData("backup.txt");
+
+	while (getline(inData, line))
+	{
+		outData << line << endl;
+
+	}
+	inData.close();
+	outData.close();
+
+
+	//copying profile data from profiles.txt to backup.txt
+	 inData.open("profiles.txt");
+	
+	 outData.open("backup.txt");
 	//ofstream tempFile("profiles.txt");
 	while (getline(inData, line)) {
 		if (line == checkName) {		// copy  13 lines
@@ -651,9 +692,9 @@ void updateProfile(string checkName) {
 	}
 	inData.close();
 	outData.close();
-	
+
 	// profiles copied to temp.txt
-	
+
 
 	ofstream outDataFinal("profiles.txt", ios::trunc);    // emptied contents of profile.txt
 	ifstream inDataFinal("temp.txt");
@@ -667,6 +708,22 @@ void updateProfile(string checkName) {
 
 	SolarCalc(checkName);
 }
+void restorefile()
+{
+	string line;
+	ifstream inData("backup.txt");
+	ofstream outData("profiles.txt");
+
+	while (getline(inData, line))
+	{
+		outData << line << endl;
+		
+	}
+	inData.close();
+	outData.close();
+
+}
+
 
 int main() {
 	int option;
@@ -743,13 +800,16 @@ int main() {
 				}
 				else {
 					deleteProfile(checkName);
+					
 				}
 
 			}
 			break;
 		case 5:
-			// exit program
-			return 0;
+			restorefile();
+			break;
+		case 6:
+				return 0;
 		}
 	}
 	return 0;
