@@ -8,7 +8,6 @@ float area, totalpower, totalHeavyEnergy, totalLightEnergy, kw;
 string forename, surname, username, password, confirmpassword, logusername, logpassword;
 const string adminUsername = "admin", adminPw = "abcd";
 
-
 float marla() {
 	// returns Kanals
 	float marlasize;
@@ -96,13 +95,13 @@ float energyHeavyTotal() {
 	{
 		cout << "Enter number of refrigerators used by the entire house: ";
 		cin >> refrigerators;
-	} while (refrigerators < 0 || refrigerators> area * 6);
+	} while (refrigerators < 0 || refrigerators> 20);
 	energy_fridge = energyFridge(refrigerators);
 	do
 	{
 		cout << "Enter number of Air conditioners actively used by the entire house: ";
 		cin >> ac;
-	} while (ac < 0 || ac> area * 12);
+	} while (ac < 0 || ac > 50);
 	energy_AC = energyAC(ac);
 	do
 	{
@@ -181,9 +180,9 @@ int getSunpeakhours() // to calculate the peak sun hours per day
 	int sunhours;
 	do
 	{
-		cout << "Please enter the number of sun peak hours : \n";
 		cout << "For Upper Pakistan, Enter 5.\n";
 		cout << "For Lower Pakistan, Enter 6.\n";
+		cout << "Please enter the number of sun peak hours : ";
 		cin >> sunhours;
 	} while (sunhours < 5 || sunhours > 6);
 	return sunhours;
@@ -214,6 +213,7 @@ int platetype() // returns the plate type
 		cout << "Choose one of the following plate options:\n";
 		cout << "575 Watt Plate - Small in size but less efficient.\n";
 		cout << "595 Watt Plate - Large in size but are more efficient.\n";
+		cout << "Type (575/595): ";
 		cin >> typeofplate;
 	} while (typeofplate != 575 && typeofplate != 595);
 	return typeofplate;
@@ -228,7 +228,8 @@ int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) 
 		if (areaofplates > roof_size) {
 			do
 			{
-				cout << "We regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation, please press 1 to proceed, or press 2 to continue without installing the stand." << endl;
+				cout << "We regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation" << endl;
+				cout << " Please press 1 to proceed, or press 2 to continue without installing the stand." << endl;
 				cin >> n;
 			} while (n != 1 && n != 2);
 
@@ -454,15 +455,26 @@ bool login()
 {
 	cout << "PLease complete the following fields to proceed with your request\n\n";
 
-	cout << "Please enter your username: ";
+	cout << "Please enter admin username: ";
 	cin >> logusername;
 	if (logusername == adminUsername) {
-		cout << "Please enter the password: ";
+		cout << "Please enter admin password: ";
 		cin >> logpassword;
-		if (logpassword == adminPw)
+		if (logpassword == adminPw) {
+			cout << "Successful login." << endl << endl;
 			return true;
+		}
+		else{
+			cout << "Wrong admin password." << endl << endl;
+			return false;
+		}
+			
 	}
-	return false;
+	else {
+		cout << "Wrong admin username." << endl << endl;
+		return false;
+	}
+	
 
 
 	//cout << "WELCOME USER: " << username << endl << endl << endl;
@@ -472,21 +484,18 @@ bool login()
 void createaccount()
 {
 	cout << "CREATE AN ACCOUNT\n\n";
-	cout << "Please complete the following fields to successfully set up your account. Ensure all information provided is accurate to proceed smoothly with the setup process\n";
-	cout << endl << "Please enter your forename: ";   // add in file
+	cout << "Please complete the following fields to successfully set up your account. Ensure all information provided is accurate to proceed smoothly with the setup process\n\n";
+	cout << "Please enter your forename: ";   // add in file
 	cin >> forename;
-	cout << endl << "Please enter your surname: ";		// add in file
+	cout << "Please enter your surname: ";		// add in file
 	cin >> surname;
-	cout << endl << "Please enter your desired username as it will appear on your profile: ";	//add in global array
-	cin >> username;
 
 
 	profile_number++;
-	cout << endl << "Congratulations! Your account has been successfully set up.\n\n";
+	cout << "\nCongratulations! Your account has been successfully set up.\n\n";
 	ofstream outData;
 	outData.open("profiles.txt", ios::app);
-	outData << "Profile1: " << username << endl;
-	outData << "Name: " << forename << " " << surname << endl;
+	outData << "Profile Name: " << forename << " " << surname << endl;
 	outData.close();
 }
 bool checkFile() {
@@ -514,7 +523,7 @@ bool addToFile(int rooms, int plates_requirement, int money_saved, int invertor_
 	outData << "Earthing cost: " << earthing << " PKR" << endl;
 	outData << "Other costs: " << other_costs << " PKR" << endl;
 	outData << "Total cost has ammounted to: " << total_cost << " PKR" << endl;
-	outData << "Money saved in bills: " << money_saved << " PKR" << endl;
+	outData << "Potential savings in bills: " << money_saved << " PKR" << endl << endl;
 	outData.close();
 
 	return true;
@@ -570,28 +579,104 @@ void SolarCalc() {
 
 void readfile()
 {
-	ifstream data("profiles.txt");
-	if (!data)
+	ifstream inData("profiles.txt");
+	if (!inData)
 	{
 		cout << "File does not exist";
 		return;
 	}
 	string line;
 	// Read file line by line
-	while (getline(data, line)) {
+	while (getline(inData, line)) {
 		cout << line << endl; // Output each line to the console
 	}
-
-	data.close();
+	cout << endl;
+	inData.close();
 
 }
+bool nameExists(string name) {
+	bool found = false;
+	string line;
+	ifstream inData("profiles.txt");
+	if (!inData)
+	{
+		cout << "File does not exist";
+		inData.close();
+		return false;
+	}
+	while (getline(inData, line)) {
+		if (name == line) {
+			inData.close();
+			return true;
+		}
+	}
+	inData.close();
+	return false;
+}
+void deleteProfile(string checkName){   // format of checkName is "Profile Name: firsName LastName"
+	string line;
+	ifstream inData("profiles.txt");
+	ofstream outData("temp.txt");
+	//ofstream tempFile("profiles.txt");
+	while (getline(inData, line)) {
+		if (line == checkName) {		// copy  13 lines
+			for (int i = 0; i < 14; i++){
+				getline(inData, line);
+			}
+		}
+		else{
+			outData << line << endl;
+		}
+	}
+	// profiles copied to temp.txt
+	inData.close();
+	outData.close();
 
+	ofstream outDataFinal("profiles.txt", ios::trunc);    // emptied contents of profile.txt
+	ifstream inDataFinal("temp.txt");
+	while (getline(inDataFinal, line)) {
+		outDataFinal << line << endl;
+	}
+	inDataFinal.close();
+	outDataFinal.close();
+	cout << "Profile deleted successfully" << endl;
+}
+void updateProfile(string checkName) {
+	string line;
+	ifstream inData("profiles.txt");
+	ofstream outData("temp.txt");
+	
+	while (getline(inData, line)) {
+		if (line == checkName) {		// copy  13 lines
+			for (int i = 0; i < 14; i++) {
+				getline(inData, line);
+			}
+			outData << checkName << endl;
+			SolarCalc();
+		}
+		else {
+			outData << line << endl;
+		}
+	}
+	// profiles copied to temp.txt
+	inData.close();
+	outData.close();
 
-
+	ofstream outDataFinal("profiles.txt", ios::trunc);    // emptied contents of profile.txt
+	ifstream inDataFinal("temp.txt");
+	while (getline(inDataFinal, line)) {
+		outDataFinal << line << endl;
+	}
+	inDataFinal.close();
+	outDataFinal.close();
+	remove("temp.txt");
+	cout << "Profile deleted successfully" << endl;
+}
 
 int main() {
 	int option;
-	bool fileExist = false;
+	bool fileExist = false, nameExistence, flag;
+	string checkName;
 	cout << "WELCOME TO THE SOLAR PANEL ESTIMATOR\n\n\n";
 	while (true) {
 		option = userOption();
@@ -600,10 +685,7 @@ int main() {
 		case 1:
 			// creates a new profile
 			createaccount();
-			if (login())
-				SolarCalc();
-			else
-				cout << "Failed to login. Please select another option.";
+			SolarCalc();
 
 			break;
 		case 2:
@@ -614,7 +696,7 @@ int main() {
 			if(login())
 				readfile();
 			else
-				cout << "Failed to login. Please select another option.";
+				cout << "Failed to login. Please select another option." << endl << endl;
 
 			break;
 		case 3:
@@ -623,15 +705,21 @@ int main() {
 			// check file, if doesnt exist then print No profiles exist and ask options 1-5 again
 			// if it exists, ask which profile in file
 			if (!login())
-				return false;
-			else{
-				string profileEditUsername;
-
-				cout << "Enter the profile you wish to update: ";
-				cin >> profileEditUsername;
-				// check profileEditUsername with other usernames
-
-
+				cout << "Failed to login. Please select another option." << endl << endl;
+			else {
+				cout << "To Update your profile\n";
+				cout << "Please enter your first name: ";
+				cin >> forename;
+				cout << "Please enter your last name: ";
+				cin >> surname;
+				checkName = "Profile Name: " + forename + " " + surname;
+				nameExistence = nameExists(checkName);
+				if (!nameExistence) {
+					cout << "Unable to update profile. Please select another option." << endl << endl;
+				}
+				else {
+					updateProfile(checkName);
+				}
 
 			}
 
@@ -645,7 +733,25 @@ int main() {
 				// if exists, ask which profile in file
 					// if profile doesnt exists, print no profile
 					// else confirm deletion
+			if (!login())
+				cout << "Failed to login. Please select another option." << endl << endl;
+			else {
+				cout << "To delete your profile\n";
+				cout << "Please enter your first name: ";
+				cin >> forename;
+				cout << "Please enter your last name: ";
+				cin >> surname;
+				checkName =  "Profile Name: " + forename + " " + surname;
+				nameExistence = nameExists(checkName);
+				if (!nameExistence) {
+					cout<<"Unable to delete profile. Please select another option." << endl << endl;
+				}
+				else {
+					deleteProfile(checkName);
+				}
 
+
+			}
 			break;
 		case 5:
 			// exit program
