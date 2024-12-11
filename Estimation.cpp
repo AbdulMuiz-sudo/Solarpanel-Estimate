@@ -555,7 +555,7 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 		if (invertorChoice == 'Y') {
 			battery = 1;
 			invertor = 'H';
-			cout << "\t\t\nBased on your requirements, a Hybrid system is the most suitable option.\n\n";
+			cout << "\t\t\"Based on your requirements, a hybrid system combined with an on-grid setup is suitable.\n\n";
 		}
 		else {
 			invertor = 'O';
@@ -646,7 +646,7 @@ int getHybridDiv(int invertorSize) // to calculate the size of the hybrid invert
 			cin.ignore(1000, '\n');
 			cout << "\nInvalid input! Kindly enter integer value.\n";
 		}
-		else if (hybridKW < 0 || hybridKW > invertorSize);
+		else if (hybridKW < 0 || hybridKW > invertorSize)
 		{
 			cout << "Kindly enter value more than 0 or less than " << invertorSize << endl;
 		}
