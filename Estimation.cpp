@@ -260,11 +260,115 @@ float energyMiscSmall(float misSmallAppl) {
 	return 20 * misSmallAppl * ValidTime() * 30;
 }
 float energyLightTotal(int rooms) {
+	// returns Wh of all light appliances
+	int fans, lightsPerRoom, total_fans, total_lights, miscsmall;
+	float energy_Fans, energy_Lights, energy_mis_small;
+
+
+
+
+	do {
+		cout << "\nKindly enter the number of fans used per room: ";
+		cin >> fans;
+
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "\nInvalid input! Kindly enter integer value.\n";
+		}
+		else if (fans < 0 || fans > static_cast<int>(area * 3))
+		{
+			cout << "Kindly enter a value between 0 and " << static_cast<int>(area * 3) << endl;
+
+		}
+	} while (fans < 0 || fans > static_cast<int>(area * 3) || cin.fail());
+
+	total_fans = fans * rooms;
+	energy_Fans = energyFans(total_fans);
+
+
+
+	do {
+		cout << "\nKindly enter the number of lights used per room: ";
+		cin >> lightsPerRoom;
+
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "\nInvalid input! Kindly enter integer value.\n";
+		}
+		else if (lightsPerRoom < 0 || lightsPerRoom > static_cast<int>(area * 20))
+		{
+			cout << "Kindly enter a value between 0 and " << static_cast<int>(area * 20) << endl;
+
+		}
+	} while (lightsPerRoom < 0 || lightsPerRoom > static_cast<int>(area * 20) || cin.fail());
+
+
+	total_lights = lightsPerRoom * rooms;
+	energy_Lights = energyLights(total_lights);
+
+
+
+	do {
+		cout << "\nKindly enter the number of small miscellaneous appliances you use: ";
+		cin >> miscsmall;
+
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "\nInvalid input! Kindly enter integer value.\n";
+		}
+		else if (miscsmall < 0 || miscsmall > static_cast<int>(area * 20))
+		{
+			cout << "Kindly enter a value between 0 and " << static_cast<int>(area * 20) << endl;
+
+		}
+	} while (miscsmall < 0 || miscsmall > static_cast<int>(area * 20) || cin.fail());
+
+	energy_mis_small = energyMiscSmall(miscsmall);
+	totalapp = totalapp + miscsmall + total_fans + total_lights;
+	return energy_Fans + energy_Lights + energy_mis_small;
 }
 // solar panels
 int getSunpeakhours() // to calculate the peak sun hours per day
+{
+	// returns sun hours 
+	int sunhours;
+
+
+
+	do {
+		cout << "\n\t\tCalculation for the Sun Peak Hours in your Area\n\n";
+		cout << "\nFor Upper Pakistan, Enter 5.\n";
+		cout << "\nFor Lower Pakistan, Enter 6.\n";
+		cout << "\nPlease enter the number of sun peak hours: ";
+		cin >> sunhours;
+
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "\nInvalid input! Kindly enter integer value.\n";
+		}
+		else if (sunhours != 6 && sunhours != 5)
+		{
+			cout << "Kindly enter 5 or 6" << endl;
+		}
+	} while (sunhours != 6 && sunhours != 5 || cin.fail());
+
+
+	return sunhours;
 }
 float calculationofWh(int sunhours, float total_energy) // to calculate the energy the solar has to generate per month
+{
+	// returns requirement in watt Hours
+	float totalwh;
+	totalwh = (total_energy) / (sunhours * 30);
+	return totalwh;
 }
 float roofsize() // the roof area of the house in sq feet
 {
@@ -293,6 +397,28 @@ float roofsize() // the roof area of the house in sq feet
 	return roofSqFt;
 }
 int platetype() // returns the plate type
+{
+	int typeofplate;
+
+	do {
+		cout << "\n\t\t Kindly Choose one of the Following Plate Options:\n";
+		cout << "\n575 Watt Plate - Small in size, less efficient and more panels required for the same power usage.\n";
+		cout << "\n595 Watt Plate - Large in size, more efficient and less panels required for the same power usage.\n";
+		cout << "\nTherefore, ultimate panel cost is comparable.\n";
+		cout << "\nType (575/595): ";
+		cin >> typeofplate;
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "\nInvalid input! Kindly enter integer value.\n";
+		}
+		else if (typeofplate != 575 && typeofplate != 595)
+		{
+			cout << "Kindly enter 575 or 595 only!" << endl;
+		}
+	} while ((typeofplate != 575 && typeofplate != 595) || cin.fail());
+	return typeofplate;
 }
 int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) // to calculate the plates required
 {
