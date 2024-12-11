@@ -11,8 +11,6 @@ const string adminUsername = "admin", adminPw = "abcd";
 float marla() {
 	float marlasize;
 
-
-
 	do {
 		cout << "\nKindly enter the size of your house in Marla: ";
 		cin >> marlasize;
@@ -53,9 +51,6 @@ float kanal() {
 		}
 	} while (kanalsize <= 0 || kanalsize > 15 || cin.fail());
 
-
-
-
 	return kanalsize;
 }
 int checkRoom() {
@@ -82,10 +77,7 @@ int checkRoom() {
 
 float ValidTime()
 {
-
 	float time;
-
-
 	do {
 		cout << "\nKindly enter the number of hours it is used daily: ";
 		cin >> time;
@@ -102,8 +94,6 @@ float ValidTime()
 		}
 	} while (time < 0 || time > 24 || cin.fail());
 
-
-
 	return time;
 }
 
@@ -116,7 +106,6 @@ float energyCars(float noOfCars) {
 	if (noOfCars == 0)
 		return 0;
 
-
 	return 7200 * noOfCars * ValidTime() * 30;
 }
 float energyFridge(float noOfFridge) {
@@ -126,15 +115,10 @@ float energyFridge(float noOfFridge) {
 float energyAC(float noOfAC) {
 	// returns energy in Wh used by all AC's
 
-
-
 	return 1200 * noOfAC * ValidTime() * 30;
 }
 float energyMiscHeavy(float misHeavyAppliances) {
 	// returns energy in Wh used by miscellaneous appliances
-
-
-
 
 	return 500 * misHeavyAppliances * ValidTime() * 30;
 }
@@ -142,9 +126,6 @@ float energyHeavyTotal() {
 	// returns total Wh of electric cars, ac, fridge
 	int car, refrigerators, ac, mischeavy;
 	float energy_car, energy_fridge, energy_AC, energy_mis_heavy;
-
-
-
 
 	do {
 		cout << "\nKindly enter the number of electric cars you wish to charge: ";
@@ -163,9 +144,7 @@ float energyHeavyTotal() {
 		}
 	} while (car < 0 || car > static_cast<int>(area * 5) || cin.fail());
 
-
 	energy_car = energyCars(car);
-
 
 	do {
 		cout << "\nKindly enter the number of refrigerators actively used in the entire house: ";
@@ -183,11 +162,6 @@ float energyHeavyTotal() {
 
 		}
 	} while (refrigerators < 0 || refrigerators > static_cast<int>(area * 8) || cin.fail());
-
-
-
-
-
 
 	energy_fridge = energyFridge(refrigerators);
 
@@ -237,25 +211,15 @@ float energyHeavyTotal() {
 float energyFans(int noOfFans) {
 	// returns Wh of all fans
 
-
-
-
-
-
 	return 50 * noOfFans * ValidTime() * 30;
 }
 float energyLights(int noOfLights) {
 	// returns Wh of all lights
 
-
-
 	return 15 * noOfLights * ValidTime() * 30;
 }
 float energyMiscSmall(float misSmallAppl) {
 	// returns Wh of all small miscellaneous appliances
-
-
-
 
 	return 20 * misSmallAppl * ValidTime() * 30;
 }
@@ -263,9 +227,6 @@ float energyLightTotal(int rooms) {
 	// returns Wh of all light appliances
 	int fans, lightsPerRoom, total_fans, total_lights, miscsmall;
 	float energy_Fans, energy_Lights, energy_mis_small;
-
-
-
 
 	do {
 		cout << "\nKindly enter the number of fans used per room: ";
@@ -287,8 +248,6 @@ float energyLightTotal(int rooms) {
 	total_fans = fans * rooms;
 	energy_Fans = energyFans(total_fans);
 
-
-
 	do {
 		cout << "\nKindly enter the number of lights used per room: ";
 		cin >> lightsPerRoom;
@@ -306,11 +265,8 @@ float energyLightTotal(int rooms) {
 		}
 	} while (lightsPerRoom < 0 || lightsPerRoom > static_cast<int>(area * 20) || cin.fail());
 
-
 	total_lights = lightsPerRoom * rooms;
 	energy_Lights = energyLights(total_lights);
-
-
 
 	do {
 		cout << "\nKindly enter the number of small miscellaneous appliances you use: ";
@@ -339,8 +295,6 @@ int getSunpeakhours() // to calculate the peak sun hours per day
 	// returns sun hours 
 	int sunhours;
 
-
-
 	do {
 		cout << "\n\t\tCalculation for the Sun Peak Hours in your Area\n\n";
 		cout << "\nFor Upper Pakistan, Enter 5.\n";
@@ -360,7 +314,6 @@ int getSunpeakhours() // to calculate the peak sun hours per day
 		}
 	} while (sunhours != 6 && sunhours != 5 || cin.fail());
 
-
 	return sunhours;
 }
 float calculationofWh(int sunhours, float total_energy) // to calculate the energy the solar has to generate per month
@@ -374,10 +327,7 @@ float roofsize() // the roof area of the house in sq feet
 {
 	float roofSqFt;
 
-
-
 	cout << "\nAccording to Pakistani bylaws, a 1 Kanal property has a 1300 sqft roof, and a 10 Marla property has a 1150 sqft roof." << endl;
-
 
 	do {
 		cout << "\nKindly enter the roof size in square feet: ";
@@ -525,44 +475,40 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 			cout << "Kindly enter 'N' or 'Y' only!" << endl;
 		}
 	} while (ans2 != 'Y' && ans2 != 'N' || cin.fail());
-	if (ans1=='Y'&&ans2=='Y')
+	if (ans1 == 'Y' && ans2 == 'Y')
 	{
 		invertor = 'O';
-		cout << "\nBased on your requirements, an On - Grid system is the most suitable option.\n";
-	}
-	else{
-	
-
-	do {
-
-		cout << "\t\t\nWe recommend selecting a Hybrid inverter for optimal performance.\n";
-		cout << "\nWould you like to incorporate a Hybrid Invertor with your On-Grid system ? (Y/N) ";
-		cin >> invertorChoice;
-		if (cin.fail())
-		{
-			cin.clear();
-			cin.ignore(1000, '\n');
-			cout << "\nInvalid input! Kindly enter character.\n";
-		}
-		else if (invertorChoice != 'Y' && invertorChoice != 'N')
-		{
-			cout << "Kindly enter 'N' or 'Y' only!" << endl;
-		}
-	} while ((invertorChoice != 'Y' && invertorChoice != 'N') || cin.fail());
-
-
-
-
-
-	if (invertorChoice == 'Y') {
-		battery = 1;
-		invertor = 'H';
-		cout << "\t\t\Based on your requirements, a hybrid system combined with an on-grid setup is suitable.\n\n";
+		cout << "\nBased on your requirements, an On-Grid system is the most suitable option.\n";
 	}
 	else {
-		invertor = 'O';
-		cout << "\nBased on your requirements, an On - Grid system is the most suitable option.\n";
-	}
+
+
+		do {
+
+			cout << "\t\t\nWe recommend selecting a Hybrid inverter for optimal performance.\n";
+			cout << "\nWould you like to incorporate a Hybrid Invertor with your On-Grid system ? (Y/N) ";
+			cin >> invertorChoice;
+			if (cin.fail())
+			{
+				cin.clear();
+				cin.ignore(1000, '\n');
+				cout << "\nInvalid input! Kindly enter character.\n";
+			}
+			else if (invertorChoice != 'Y' && invertorChoice != 'N')
+			{
+				cout << "Kindly enter 'N' or 'Y' only!" << endl;
+			}
+		} while ((invertorChoice != 'Y' && invertorChoice != 'N') || cin.fail());
+
+		if (invertorChoice == 'Y') {
+			battery = 1;
+			invertor = 'H';
+			cout << "\t\t\Based on your requirements, a hybrid system combined with an on-grid setup is suitable.\n\n";
+		}
+		else {
+			invertor = 'O';
+			cout << "\nBased on your requirements, an On - Grid system is the most suitable option.\n";
+		}
 	}
 
 	return invertor;
@@ -632,9 +578,8 @@ float invertorsize(char invertorType, int totalplates, int typeofplate) // to ca
 	return invertorsize;
 }
 int getHybridDiv(int invertorSize) // to calculate the size of the hybrid invertor
-{	
+{
 	int hybridKW;
-
 
 	do {
 
@@ -760,13 +705,13 @@ float moneysaved(float total_energy)
 int userOption() {
 	int option;
 	cout << endl << endl;
-	cout << "\t\t| MENU |"<<endl;
-	cout << "\n1: Create New Profile \n2: View All Profiles \n3: Update Profile \n4: Delete Profile \n5: Restore previous profile\n6: Exit\n\n";
+	cout << "\t\t| MENU |" << endl;
+	cout << "\n1: Create New Profile \n2: View All Profiles \n3: Update Profile \n4: Delete Profile \n5: Restore previous profile\n6: Tips and Resources\n7: Exit\n\n";
 
 	do {
 
 
-		cout << "\tKindly select an option from 1 to 6 to proceed: ";
+		cout << "\tKindly select an option from 1 to 7 to proceed: ";
 		cin >> option;
 		if (cin.fail())
 		{
@@ -774,11 +719,11 @@ int userOption() {
 			cin.ignore(1000, '\n');
 			cout << "\nInvalid input! Kindly enter integer value.\n";
 		}
-		else if (option < 1 || option>6)
+		else if (option < 1 || option>7)
 		{
-			cout << "Kindly enter value between 1 and 6 only! " << endl;
+			cout << "Kindly enter value between 1 and 7 only! " << endl;
 		}
-	} while (option < 1 || option>6 || cin.fail());
+	} while (option < 1 || option>7 || cin.fail());
 
 
 
@@ -897,7 +842,7 @@ void SolarCalcToFile(string firstLine) {
 
 
 	int rooms, sun_hours, plate_type, plates_requirement, total_cost, Ongrid_invertor_size, Hybrid_invertor_size{}, invertor_cost;
-
+	cout << "\nPlease input the peak usage values during summers to ensure sufficient headroom and to minimize the risk of accidents.\n";
 	do {
 
 
@@ -951,7 +896,7 @@ void SolarCalcToFile(string firstLine) {
 	outData << "Number of Appliances: " << totalapp << endl;
 	outData << "Number of plates required: " << plates_requirement << endl;
 	outData << "Invertor Cost: " << invertor_cost << " PKR" << endl;
-	outData << "Plates cost: " << plate_cost << " PKR" << endl;
+	outData << "Plates cost: " << static_cast<int>(plate_cost) << " PKR" << endl;
 	outData << "Stand cost: " << stand_cost << " PKR" << endl;
 	outData << "Labour cost: " << labour_cost << " PKR" << endl;
 	outData << "Battery cost: " << battery_cost << " PKR" << endl;
@@ -968,7 +913,7 @@ void SolarCalcToFile(string firstLine) {
 	outData << "Number of Appliances: " << totalapp << endl;
 	outData << "Number of plates required: " << plates_requirement << endl;
 	outData << "Invertor Cost: " << invertor_cost << " PKR" << endl;
-	outData << "Plates cost: " << plate_cost << " PKR" << endl;
+	outData << "Plates cost: " << static_cast<int>(plate_cost) << " PKR" << endl;
 	outData << "Stand cost: " << stand_cost << " PKR" << endl;
 	outData << "Labour cost: " << labour_cost << " PKR" << endl;
 	outData << "Battery cost: " << battery_cost << " PKR" << endl;
@@ -977,6 +922,7 @@ void SolarCalcToFile(string firstLine) {
 	outData << "Total cost has ammounted to: " << total_cost << " PKR" << endl;
 	outData << "Potential savings in bills: " << money_saved << " PKR" << endl << endl;
 	outData.close();
+	cout << "\nTo access your summary, please select option 2.\n";
 	return;
 }
 
@@ -997,10 +943,29 @@ void readfile()
 	inData.close();
 
 }
-bool nameExists(string name) {
+bool nameExistsProfiles(string name) {
 	bool found = false;
 	string line;
 	ifstream inData("profiles.txt");
+	if (!inData)
+	{
+		cout << "\nFile does not exist. Please try another option.\n";
+		inData.close();
+		return false;
+	}
+	while (getline(inData, line)) {
+		if (name == line) {
+			inData.close();
+			return true;
+		}
+	}
+	inData.close();
+	return false;
+}
+bool nameExistsBackup(string name) {
+	bool found = false;
+	string line;
+	ifstream inData("backup.txt");
 	if (!inData)
 	{
 		cout << "\nFile does not exist. Please try another option.\n";
@@ -1053,27 +1018,23 @@ void deleteProfile(string checkName)
 	}
 	outData.close();
 	inData.close();
+	//copying profile data from profiles.txt to temp.txt
 
-
-
-	////copying profile data from profiles.txt to backup.txt
-	//inData.open("profiles.txt");
-
-	//outData.open("backup.txt");
-	////ofstream tempFile("profiles.txt");
-	//while (getline(inData, line)) {
-	//	if (line == checkName) {		// copy  13 lines
-	//		for (int i = 0; i < 14; i++) {
-	//			getline(inData, line);
-	//		}
-	//	}
-	//	else {
-	//		outData << line << endl;
-	//	}
-	//}
-	//// profiles copied to temp.txt
-	//inData.close();
-	//outData.close();
+	inData.open("profiles.txt");
+	outData.open("temp.txt");
+	while (getline(inData, line)) {
+		if (line == checkName) {		// copy  13 lines
+			for (int i = 0; i < 14; i++) {
+				getline(inData, line);
+			}
+		}
+		else {
+			outData << line << endl;
+		}
+	}
+	// profiles copied to temp.txt
+	inData.close();
+	outData.close();
 
 	ofstream outDataFinal("profiles.txt", ios::trunc);    // emptied contents of profile.txt
 	ifstream inDataFinal("temp.txt");
@@ -1083,6 +1044,7 @@ void deleteProfile(string checkName)
 	inDataFinal.close();
 	outDataFinal.close();
 	cout << "\nProfile deleted successfully" << endl;
+	remove("temp.txt");
 }
 void updateProfile(string checkName) {
 	string line;
@@ -1132,8 +1094,10 @@ void restorefile()
 	cout << "Enter surname: ";
 	cin >> last;
 	checkline = "Profile Name: " + fore + " " + last;
-
-
+	if(!nameExistsBackup(checkline)){
+		cout << "\nName does not exist for the file to be restored.\n";
+		return;
+	}
 	while (getline(inData, line))
 	{
 		if (checkline == line)
@@ -1151,7 +1115,6 @@ void restorefile()
 			}
 			break;
 		}
-
 	}
 	inData.close();
 	outData.close();
@@ -1163,10 +1126,10 @@ int main() {
 	int option;
 	bool fileExist = false, nameExistence, flag;
 	string checkName, firstLine;
-	
-	cout << "\t\t\t==============================================\n";
-	cout << "\t\t\t|    WELCOME TO THE SOLAR PANEL ESTIMATOR    |\n";
-	cout << "\t\t\t==============================================\n";
+
+	cout << "\t\t\t\t==============================================\n";
+	cout << "\t\t\t\t|    WELCOME TO THE SOLAR PANEL ESTIMATOR    |\n";
+	cout << "\t\t\t\t==============================================\n";
 
 	while (true) {
 		option = userOption();
@@ -1176,7 +1139,6 @@ int main() {
 			// creates a new profile
 			firstLine = createaccount();
 			SolarCalcToFile(firstLine);
-
 
 			break;
 		case 2:
@@ -1222,7 +1184,7 @@ int main() {
 					}
 				} while (cin.fail());
 				checkName = "Profile Name: " + forename + " " + surname;
-				nameExistence = nameExists(checkName);
+				nameExistence = nameExistsProfiles(checkName);
 				if (!nameExistence) {
 					cout << "\nProfile update unsuccessful. Please choose a different option to proceed." << endl << endl;
 				}
@@ -1269,7 +1231,7 @@ int main() {
 					}
 				} while (cin.fail());
 				checkName = "Profile Name: " + forename + " " + surname;
-				nameExistence = nameExists(checkName);
+				nameExistence = nameExistsProfiles(checkName);
 				if (!nameExistence) {
 					cout << "\nProfile deletion unsuccessful. Please choose a different option to proceed." << endl << endl;
 				}
@@ -1286,12 +1248,40 @@ int main() {
 			break;
 		case 6:
 
+			cout << "\nTo learn more about solar energy and the benefits you can achieve by installing solar panels, kindly visit the website provided below by pressing leftCtrl and right mouse button\n";
+			cout << "https://www.constellation.com/energy-101/energy-innovation/solar-energy-pros-and-cons.html" << endl << endl;
+			cout << "Choosing a 575W solar panel over a 595W panel depends on specific needs and constraints:\n\n"
+				<< "  1. Smaller Size         : Better fit for limited space or precise placements.\n"
+				<< "  2. Ease of Installation : Lighter and easier to handle, reducing labor effort.\n"
+				<< "  3. System Compatibility : Matches existing arrays in size or efficiency.\n"
+				<< "  4. Cost                 : Lower upfront cost, despite comparable overall expense.\n"
+				<< "  5. Availability         : Shorter lead times or higher stock levels.\n"
+				<< "  6. Small Roofs          : Better suited for optimizing limited roof space.\n"
+				<< "  7. Project Requirements : Tailored to specific efficiency or design needs.\n\n\n";
 
+			cout << "Brushing solar panels periodically helps improve efficiency by:\n\n";
+			cout << " 1. Removing dust and dirt that block sunlight absorption.\n";
+			cout << " 2. Preventing long-term build-up of debris, avoiding damage.\n";
+			cout << " 3. Ensuring optimal light absorption for maximum energy output.\n";
+			cout << " 4. Preventing water and mineral deposits that reduce performance.\n";
+			cout << " 5. Recommended cleaning every 6 to 12 months, depending on location.\n";
+			cout << "Use a soft-bristled brush to avoid scratches and damage.\n";
+			cout << "Regular brushing keeps panels at peak efficiency and extends their lifespan.\n\n\n";
+
+			cout << "Solar Panel Maintenance Tips:\n\n";
+			cout << " 1. Regular Cleaning: Clean panels every 6-12 months using a soft brush or hose. Avoid harsh chemicals.\n";
+			cout << " 2. Inspect for Damage: Check for cracks, chips, and secure mounting. Repair if needed.\n";
+			cout << " 3. Monitor Performance: Track energy output and check inverters for faults. A sudden drop may indicate an issue.\n";
+			cout << " 4. Ensure Proper Ventilation: Keep space around panels clear of obstructions to prevent overheating.\n";
+			cout << " 5. Check Electrical Connections: Inspect wiring for wear and corrosion, and ensure grounding.\n";
+			cout << " 6. Professional Inspections: Get a technician to inspect the system every 1-2 years.\n";
+			cout << " 7. Snow and Ice Maintenance: Remove snow gently using a soft broom. Avoid high-pressure water.\n";
+			cout << " 8. System Firmware: Keep inverter firmware updated to optimize performance.\n";
+
+			cout << "\nRegular maintenance ensures optimal efficiency and long-lasting solar panels!\n";
+			break;
+		case 7:
 			cout << "\n\nThank you for using the Solar Estimator Program. We sincerely hope that our estimations meet your expectations and prove to be helpful. Should you require any further assistance, please do not hesitate to contact us at: \n l242553@lhr.nu.edu.pk\n l242591@lhr.nu.edu.pk\n l242501@lhr.nu.edu.pk" << endl;
-			cout << "To learn more about solar energy and the benefits you can achieve by installing solar panels, kindly visit the website provided below\n";
-			cout << "https://www.constellation.com/energy-101/energy-innovation/solar-energy-pros-and-cons.html" << endl;
-
-
 			return 0;
 		}
 	}
