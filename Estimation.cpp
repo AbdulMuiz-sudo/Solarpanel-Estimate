@@ -555,7 +555,7 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 		if (invertorChoice == 'Y') {
 			battery = 1;
 			invertor = 'H';
-			cout << "\t\t\"Based on your requirements, a hybrid system combined with an on-grid setup is suitable.\n\n";
+			cout << "\t\t\Based on your requirements, a hybrid system combined with an on-grid setup is suitable.\n\n";
 		}
 		else {
 			invertor = 'O';
@@ -1048,28 +1048,29 @@ void deleteProfile(string checkName)
 		outData << line << endl;
 
 	}
-	inData.close();
 	outData.close();
-
-
-	//copying profile data from profiles.txt to backup.txt
-	inData.open("profiles.txt");
-
-	outData.open("backup.txt");
-	//ofstream tempFile("profiles.txt");
-	while (getline(inData, line)) {
-		if (line == checkName) {		// copy  13 lines
-			for (int i = 0; i < 14; i++) {
-				getline(inData, line);
-			}
-		}
-		else {
-			outData << line << endl;
-		}
-	}
-	// profiles copied to temp.txt
 	inData.close();
-	outData.close();
+	
+
+
+	////copying profile data from profiles.txt to backup.txt
+	//inData.open("profiles.txt");
+
+	//outData.open("backup.txt");
+	////ofstream tempFile("profiles.txt");
+	//while (getline(inData, line)) {
+	//	if (line == checkName) {		// copy  13 lines
+	//		for (int i = 0; i < 14; i++) {
+	//			getline(inData, line);
+	//		}
+	//	}
+	//	else {
+	//		outData << line << endl;
+	//	}
+	//}
+	//// profiles copied to temp.txt
+	//inData.close();
+	//outData.close();
 
 	ofstream outDataFinal("profiles.txt", ios::trunc);    // emptied contents of profile.txt
 	ifstream inDataFinal("temp.txt");
@@ -1115,17 +1116,38 @@ void updateProfile(string checkName) {
 }
 void restorefile()
 {
-	string line;
+	string line,checkline,fore,last;
 	ifstream inData("backup.txt");
-	ofstream outData("profiles.txt");
+	ofstream outData("profiles.txt",ios::app);
+	
 	if (!inData) {
 		cout << "File does not exist. Please choose another option to continue.\n";
 		return;
 	}
+	cout << "Enter forename: ";
+	cin >> fore;
+	cout << "Enter surname: ";
+	cin >> last;
+	checkline = "Profile Name: " + fore + " " + last;
+
 
 	while (getline(inData, line))
 	{
-		outData << line << endl;
+		if (checkline == line)
+		{
+			outData << line << endl;
+			for (int i = 0; i < 14; i++)
+			{
+				if (getline(inData, line))
+				{
+					outData << line << endl;
+				}
+				else {
+					break;
+				}
+			}
+			break;
+		}
 
 	}
 	inData.close();
@@ -1217,7 +1239,7 @@ int main() {
 			if (!login())
 				cout << "\nLogin unsuccessful. Kindly select an alternative option to continue." << endl << endl;
 			else {
-				cout << "\n\t\tTo update your profile, please follow the provided steps.\n\n";
+				cout << "\n\t\tTo delete your profile, please follow the provided steps.\n\n";
 				do {
 					cout << "Kindly enter your first name: ";
 					cin >> forename;
@@ -1256,9 +1278,17 @@ int main() {
 
 			break;
 		case 6:
+
+
 			cout << "\n\nThank you for using the Solar Estimator Program. We sincerely hope that our estimations meet your expectations and prove to be helpful. Should you require any further assistance, please do not hesitate to contact us at l242501@lhr.nu.edu.pk" << endl;
+			cout << "To learn more about solar energy and the benefits you can achieve by installing solar panels, kindly visit the website provided below\n";
+			cout << "https://www.constellation.com/energy-101/energy-innovation/solar-energy-pros-and-cons.html" << endl;
+
+
 			return 0;
 		}
 	}
 	return 0;
 }
+
+
