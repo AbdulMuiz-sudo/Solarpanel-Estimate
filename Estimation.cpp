@@ -496,7 +496,7 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 
 	do {
 
-		cout << "\nDo you require electricity after sunset? (Y/N)";
+		cout << "\nDo you require electricity after sunset? (Y/N) ";
 		cin >> ans1;
 		if (cin.fail())
 		{
@@ -512,7 +512,7 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 
 	do {
 
-		cout << "\nDo you experience load shedding in your area? (Y/N)";
+		cout << "\nDo you experience load shedding in your area? (Y/N) ";
 		cin >> ans2;
 		if (cin.fail())
 		{
@@ -529,7 +529,7 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 	do {
 
 		cout << "\t\t\nWe recommend selecting a Hybrid inverter for optimal performance.\n";
-		cout << "\nWould you like to incorporate a Hybrid Invertor with your On-Grid system ? (Y/N): ";
+		cout << "\nWould you like to incorporate a Hybrid Invertor with your On-Grid system ? (Y/N) ";
 		cin >> invertorChoice;
 		if (cin.fail())
 		{
@@ -569,7 +569,7 @@ float invertorsize(char invertorType, int totalplates, int typeofplate) // to ca
 
 	do {
 
-		cout << "\nDo you plan to expand your solar capacity in the future (Y/N)? ";
+		cout << "\nDo you plan to expand your solar capacity in the future? (Y/N) ";
 		cin >> p;
 		if (cin.fail())
 		{
