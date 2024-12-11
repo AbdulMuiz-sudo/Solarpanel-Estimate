@@ -87,7 +87,7 @@ float ValidTime()
 
 
 	do {
-		cout << "\nKindly enter the number of hours it is charged daily: ";
+		cout << "\nKindly enter the number of hours it is used daily: ";
 		cin >> time;
 
 		if (cin.fail())
@@ -402,8 +402,9 @@ int platetype() // returns the plate type
 
 	do {
 		cout << "\n\t\t Kindly Choose one of the Following Plate Options:\n";
-		cout << "\n575 Watt Plate - Small in size but less efficient.\n";
-		cout << "\n595 Watt Plate - Large in size but are more efficient.\n";
+		cout << "\n575 Watt Plate - Small in size, less efficient and more panels required for the same power usage.\n";
+		cout << "\n595 Watt Plate - Large in size, more efficient and less panels required for the same power usage.\n";
+		cout << "\nTherefore, ultimate panel cost is comparable.\n";
 		cout << "\nType (575/595): ";
 		cin >> typeofplate;
 		if (cin.fail())
@@ -429,7 +430,7 @@ int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) 
 		if (areaofplates > roof_size) {
 			do {
 
-				cout << "\nWe regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation, kindly press 1 to proceed, or kindly 2 to continue without the stand installation: ";
+				cout << "\nWe regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation, kindly press 1 to proceed, or 2 to continue without the stand installation: ";
 				cin >> n;
 				if (cin.fail())
 				{
@@ -495,7 +496,7 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 
 	do {
 
-		cout << "\nDo you require electricity after sunset? (Y/N)";
+		cout << "\nDo you require electricity after sunset? (Y/N) ";
 		cin >> ans1;
 		if (cin.fail())
 		{
@@ -511,7 +512,7 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 
 	do {
 
-		cout << "\nDo you experience load shedding in your area? (Y/N)";
+		cout << "\nDo you experience load shedding in your area? (Y/N) ";
 		cin >> ans2;
 		if (cin.fail())
 		{
@@ -524,38 +525,46 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 			cout << "Kindly enter 'N' or 'Y' only!" << endl;
 		}
 	} while (ans2 != 'Y' && ans2 != 'N' || cin.fail());
-
-		do {
-
-			cout << "\t\t\nWe recommend selecting a Hybrid inverter for optimal performance.\n";
-			cout << "\nWould you like to incorporate a Hybrid Invertor with your On-Grid system ? (Y/N): ";
-			cin >> invertorChoice;
-			if (cin.fail())
-			{
-				cin.clear();
-				cin.ignore(1000, '\n');
-				cout << "\nInvalid input! Kindly enter character.\n";
-			}
-			else if (invertorChoice != 'Y' && invertorChoice != 'N')
-			{
-				cout << "Kindly enter 'N' or 'Y' only!" << endl;
-			}
-		} while ((invertorChoice != 'Y' && invertorChoice != 'N') || cin.fail());
-
-
-
-
-
-		if (invertorChoice == 'Y') {
-			battery = 1;
-			invertor = 'H';
-			cout << "\t\t\Based on your requirements, a hybrid system combined with an on-grid setup is suitable.\n\n";
-		}
-		else {
-			invertor = 'O';
-			cout << "\nBased on your requirements, an On - Grid system is the most suitable option.\n";
-		}
+	if (ans1=='Y'&&ans2=='Y')
+	{
+		invertor = 'O';
+		cout << "\nBased on your requirements, an On - Grid system is the most suitable option.\n";
+	}
+	else{
 	
+
+	do {
+
+		cout << "\t\t\nWe recommend selecting a Hybrid inverter for optimal performance.\n";
+		cout << "\nWould you like to incorporate a Hybrid Invertor with your On-Grid system ? (Y/N) ";
+		cin >> invertorChoice;
+		if (cin.fail())
+		{
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "\nInvalid input! Kindly enter character.\n";
+		}
+		else if (invertorChoice != 'Y' && invertorChoice != 'N')
+		{
+			cout << "Kindly enter 'N' or 'Y' only!" << endl;
+		}
+	} while ((invertorChoice != 'Y' && invertorChoice != 'N') || cin.fail());
+
+
+
+
+
+	if (invertorChoice == 'Y') {
+		battery = 1;
+		invertor = 'H';
+		cout << "\t\t\Based on your requirements, a hybrid system combined with an on-grid setup is suitable.\n\n";
+	}
+	else {
+		invertor = 'O';
+		cout << "\nBased on your requirements, an On - Grid system is the most suitable option.\n";
+	}
+	}
+
 	return invertor;
 }
 float invertorsize(char invertorType, int totalplates, int typeofplate) // to calculate the total size of the invertor
@@ -566,10 +575,9 @@ float invertorsize(char invertorType, int totalplates, int typeofplate) // to ca
 	float estkw;
 	float diff;
 
-
 	do {
 
-		cout << "\nDo you plan to expand your solar capacity in the future (Y/N)? ";
+		cout << "\nDo you plan to expand your solar capacity in the future? (Y/N) ";
 		cin >> p;
 		if (cin.fail())
 		{
@@ -583,7 +591,7 @@ float invertorsize(char invertorType, int totalplates, int typeofplate) // to ca
 		}
 	} while ((p != 'Y' && p != 'N') || cin.fail());
 
-     if (p == 'Y')
+	if (p == 'Y')
 	{
 
 		do {
@@ -611,20 +619,20 @@ float invertorsize(char invertorType, int totalplates, int typeofplate) // to ca
 		else
 			invertorsize = kw + 1;
 	}
-    else if (p=='N')
-    {
-        diff = static_cast<float>(kw) - static_cast<int>(kw);
+	else if (p == 'N')
+	{
+		diff = static_cast<float>(kw) - static_cast<int>(kw);
 		if (diff == 0)
 			invertorsize = kw;
 
 		else
 			invertorsize = kw + 1;
-    }
-    
+	}
+
 	return invertorsize;
 }
 int getHybridDiv(int invertorSize) // to calculate the size of the hybrid invertor
-{								   // will only run if invertorType is hybrid
+{	
 	int hybridKW;
 
 
@@ -714,7 +722,7 @@ float costs(float invertorcosts, float platecost, float labourcosts, float other
 	do {
 
 
-		cout << "\nDo you require earthing to protect your appliances from lightning ? (Y/N)";
+		cout << "\nDo you require earthing to protect your appliances from lightning? (Y/N) ";
 		cin >> e;
 		if (cin.fail())
 		{
@@ -1016,7 +1024,7 @@ void deleteProfile(string checkName)
 
 
 	do {
-		cout << "\nAre you sure you want to delete this profile ?(Y/N): ";
+		cout << "\nAre you sure you want to delete this profile? (Y/N) ";
 		cin >> choice;
 		if (cin.fail())
 		{
