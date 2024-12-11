@@ -339,11 +339,11 @@ float roofsize() // the roof area of the house in sq feet
 			cin.ignore(1000, '\n');
 			cout << "\nInvalid input! Kindly enter integer value.\n";
 		}
-		else if (roofSqFt <= 0 || roofSqFt >= area * 5445 * 0.5)
+		else if (roofSqFt < 500 || roofSqFt >= area * 5445 * 0.5)
 		{
-			cout << "Kindly enter value between 0 and " << area * 5445 * 0.5 << endl;
+			cout << "Kindly enter value between 500 and " << area * 5445 * 0.5 << endl;
 		}
-	} while (roofSqFt <= 0 || roofSqFt >= area * 5445 * 0.5 || cin.fail()); // area in kanal multiplied by sqft in 1 kanal multiplied by average ratio between roof and plot size
+	} while (roofSqFt < 500 || roofSqFt >= area * 5445 * 0.5 || cin.fail()); // area in kanal multiplied by sqft in 1 kanal multiplied by average ratio between roof and plot size
 	return roofSqFt;
 }
 int platetype() // returns the plate type
@@ -1248,7 +1248,7 @@ int main() {
 			break;
 		case 6:
 
-			cout << "\nTo learn more about solar energy and the benefits you can achieve by installing solar panels, kindly visit the website provided below by pressing leftCtrl and right mouse button\n";
+			cout << "\nTo learn more about solar energy and the benefits you can achieve by installing solar panels, kindly visit the website provided below by pressing leftCtrl and left mouse button\n";
 			cout << "https://www.constellation.com/energy-101/energy-innovation/solar-energy-pros-and-cons.html" << endl << endl;
 			cout << "Choosing a 575W solar panel over a 595W panel depends on specific needs and constraints:\n\n"
 				<< "  1. Smaller Size         : Better fit for limited space or precise placements.\n"
