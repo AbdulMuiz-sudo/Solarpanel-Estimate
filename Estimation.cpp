@@ -758,6 +758,8 @@ float moneysaved(float total_energy)
 // profile management
 int userOption() {
 	int option;
+	cout << endl << endl;
+	cout << "\t\t| MENU |"<<endl;
 	cout << "\n1: Create New Profile \n2: View All Profiles \n3: Update Profile \n4: Delete Profile \n5: Restore previous profile\n6: Exit\n\n";
 
 	do {
@@ -982,7 +984,7 @@ void readfile()
 	ifstream inData("profiles.txt");
 	if (!inData)
 	{
-		cout << "\nFile does not exist.\n";
+		cout << "\nFile does not exist. Please try another option.\n";
 		return;
 	}
 	string line;
@@ -1000,7 +1002,7 @@ bool nameExists(string name) {
 	ifstream inData("profiles.txt");
 	if (!inData)
 	{
-		cout << "\nFile does not exist.\n";
+		cout << "\nFile does not exist. Please try another option.\n";
 		inData.close();
 		return false;
 	}
@@ -1050,7 +1052,7 @@ void deleteProfile(string checkName)
 	}
 	outData.close();
 	inData.close();
-	
+
 
 
 	////copying profile data from profiles.txt to backup.txt
@@ -1116,10 +1118,10 @@ void updateProfile(string checkName) {
 }
 void restorefile()
 {
-	string line,checkline,fore,last;
+	string line, checkline, fore, last;
 	ifstream inData("backup.txt");
-	ofstream outData("profiles.txt",ios::app);
-	
+	ofstream outData("profiles.txt", ios::app);
+
 	if (!inData) {
 		cout << "File does not exist. Please choose another option to continue.\n";
 		return;
@@ -1160,7 +1162,11 @@ int main() {
 	int option;
 	bool fileExist = false, nameExistence, flag;
 	string checkName, firstLine;
-	cout << "\t\t\t\t\tWELCOME TO THE SOLAR PANEL ESTIMATOR\n\n";
+	
+	cout << "\t\t\t==============================================\n";
+	cout << "\t\t\t|    WELCOME TO THE SOLAR PANEL ESTIMATOR    |\n";
+	cout << "\t\t\t==============================================\n";
+
 	while (true) {
 		option = userOption();
 		switch (option)
@@ -1180,7 +1186,7 @@ int main() {
 			if (login())
 				readfile();
 			else
-				cout << "\nLogin failed.Please choose a different option to proceed." << endl << endl;
+				cout << "\nLogin failed. Please choose a different option to proceed." << endl << endl;
 
 			break;
 		case 3:
@@ -1194,7 +1200,7 @@ int main() {
 				cout << "\n\t\tTo update your profile, please follow the provided steps.\n";
 
 				do {
-					cout << "Kindly enter your first name: ";
+					cout << "\nKindly enter your first name: ";
 					cin >> forename;
 					if (cin.fail())
 					{
@@ -1205,7 +1211,7 @@ int main() {
 				} while (cin.fail());
 
 				do {
-					cout << "Kindly enter your last name : ";
+					cout << "\nKindly enter your last name : ";
 					cin >> surname;
 					if (cin.fail())
 					{
@@ -1217,7 +1223,7 @@ int main() {
 				checkName = "Profile Name: " + forename + " " + surname;
 				nameExistence = nameExists(checkName);
 				if (!nameExistence) {
-					cout << "Profile update unsuccessful. Please choose a different option to proceed." << endl << endl;
+					cout << "\nProfile update unsuccessful. Please choose a different option to proceed." << endl << endl;
 				}
 				else {
 					updateProfile(checkName);
@@ -1264,7 +1270,7 @@ int main() {
 				checkName = "Profile Name: " + forename + " " + surname;
 				nameExistence = nameExists(checkName);
 				if (!nameExistence) {
-					cout << "Profile deletion unsuccessful. Please choose a different option to proceed." << endl << endl;
+					cout << "\nProfile deletion unsuccessful. Please choose a different option to proceed." << endl << endl;
 				}
 				else {
 					deleteProfile(checkName);
@@ -1280,7 +1286,7 @@ int main() {
 		case 6:
 
 
-			cout << "\n\nThank you for using the Solar Estimator Program. We sincerely hope that our estimations meet your expectations and prove to be helpful. Should you require any further assistance, please do not hesitate to contact us at l242501@lhr.nu.edu.pk" << endl;
+			cout << "\n\nThank you for using the Solar Estimator Program. We sincerely hope that our estimations meet your expectations and prove to be helpful. Should you require any further assistance, please do not hesitate to contact us at: \n l242553@lhr.nu.edu.pk\n l242591@lhr.nu.edu.pk\n l242501@lhr.nu.edu.pk" << endl;
 			cout << "To learn more about solar energy and the benefits you can achieve by installing solar panels, kindly visit the website provided below\n";
 			cout << "https://www.constellation.com/energy-101/energy-innovation/solar-energy-pros-and-cons.html" << endl;
 
@@ -1290,5 +1296,4 @@ int main() {
 	}
 	return 0;
 }
-
 
