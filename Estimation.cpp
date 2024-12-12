@@ -1,17 +1,19 @@
 #include <iostream>
-#include<fstream>
-#include<string>
+#include <fstream>
+#include <string>
 using namespace std;
 
-int battery, addstandcost = 0, totalapp = 0, profile_number = 0, earthing = 0;
+int battery = 0, addstandcost = 0, totalapp = 0, profile_number = 0, earthing = 0;
 float area, totalpower, totalHeavyEnergy, totalLightEnergy, kw;
 string forename, surname, username, password, confirmpassword, logusername, logpassword;
 const string adminUsername = "admin", adminPw = "abcd";
 
-float marla() {
+float marla()
+{
 	float marlasize;
 
-	do {
+	do
+	{
 		cout << "\nKindly enter the size of your house in Marla: ";
 		cin >> marlasize;
 
@@ -31,11 +33,13 @@ float marla() {
 
 	return marlasize;
 }
-float kanal() {
+float kanal()
+{
 	// returns kanals
 	float kanalsize;
 
-	do {
+	do
+	{
 		cout << "\nKindly enter the size of your house in Kanal: ";
 		cin >> kanalsize;
 
@@ -53,10 +57,12 @@ float kanal() {
 
 	return kanalsize;
 }
-int checkRoom() {
-	// return number of rooms that use electricity 
+int checkRoom()
+{
+	// return number of rooms that use electricity
 	int rooms;
-	do {
+	do
+	{
 		cout << "\nKindly enter the number of rooms that actively use electricity : ";
 		cin >> rooms;
 		if (cin.fail())
@@ -78,7 +84,8 @@ int checkRoom() {
 float ValidTime()
 {
 	float time;
-	do {
+	do
+	{
 		cout << "\nKindly enter the number of hours it is used daily: ";
 		cin >> time;
 
@@ -97,37 +104,40 @@ float ValidTime()
 	return time;
 }
 
-
-
-
 // heavy Appliances 1) ask number 2) return their energies
-float energyCars(float noOfCars) {
+float energyCars(float noOfCars)
+{
 	// returns energy in Wh used by all electric cars
 	if (noOfCars == 0)
 		return 0;
 
 	return 7200 * noOfCars * ValidTime() * 30;
 }
-float energyFridge(float noOfFridge) {
+float energyFridge(float noOfFridge)
+{
 	// returns energy in Wh used by all refrigerators
 	return 400 * noOfFridge * 24 * 30;
 }
-float energyAC(float noOfAC) {
+float energyAC(float noOfAC)
+{
 	// returns energy in Wh used by all AC's
 
 	return 1200 * noOfAC * ValidTime() * 30;
 }
-float energyMiscHeavy(float misHeavyAppliances) {
+float energyMiscHeavy(float misHeavyAppliances)
+{
 	// returns energy in Wh used by miscellaneous appliances
 
 	return 500 * misHeavyAppliances * ValidTime() * 30;
 }
-float energyHeavyTotal() {
+float energyHeavyTotal()
+{
 	// returns total Wh of electric cars, ac, fridge
 	int car, refrigerators, ac, mischeavy;
 	float energy_car, energy_fridge, energy_AC, energy_mis_heavy;
 
-	do {
+	do
+	{
 		cout << "\nKindly enter the number of electric cars you wish to charge: ";
 		cin >> car;
 
@@ -140,13 +150,13 @@ float energyHeavyTotal() {
 		else if (car < 0 || car > static_cast<int>(area * 5))
 		{
 			cout << "Kindly enter a value between 0 and " << static_cast<int>(area * 5) << endl;
-
 		}
 	} while (car < 0 || car > static_cast<int>(area * 5) || cin.fail());
 
 	energy_car = energyCars(car);
 
-	do {
+	do
+	{
 		cout << "\nKindly enter the number of refrigerators actively used in the entire house: ";
 		cin >> refrigerators;
 
@@ -159,13 +169,13 @@ float energyHeavyTotal() {
 		else if (refrigerators < 0 || refrigerators > static_cast<int>(area * 8))
 		{
 			cout << "Kindly enter a value between 0 and " << static_cast<int>(area * 8) << endl;
-
 		}
 	} while (refrigerators < 0 || refrigerators > static_cast<int>(area * 8) || cin.fail());
 
 	energy_fridge = energyFridge(refrigerators);
 
-	do {
+	do
+	{
 		cout << "\nKindly enter the number of air conditioners actively used in the entire house: ";
 		cin >> ac;
 
@@ -178,14 +188,13 @@ float energyHeavyTotal() {
 		else if (ac < 0 || ac > static_cast<int>(area * 30))
 		{
 			cout << "Kindly enter a value between 0 and " << static_cast<int>(area * 30) << endl;
-
 		}
 	} while (ac < 0 || ac > static_cast<int>(area * 30) || cin.fail());
 
-
 	energy_AC = energyAC(ac);
 
-	do {
+	do
+	{
 		cout << "\nKindly enter the number of heavy miscellaneous appliances you use: ";
 		cin >> mischeavy;
 
@@ -198,37 +207,40 @@ float energyHeavyTotal() {
 		else if (mischeavy < 0 || mischeavy > static_cast<int>(area * 15))
 		{
 			cout << "Kindly enter a value between 0 and " << static_cast<int>(area * 15) << endl;
-
 		}
 	} while (mischeavy < 0 || mischeavy > static_cast<int>(area * 15) || cin.fail());
-
 
 	energy_mis_heavy = energyMiscHeavy(mischeavy);
 	totalapp = car + mischeavy + ac + refrigerators;
 	return energy_car + energy_fridge + energy_AC + energy_mis_heavy;
 }
 // light Appliances 1) ask number 2) return their energies
-float energyFans(int noOfFans) {
+float energyFans(int noOfFans)
+{
 	// returns Wh of all fans
 
 	return 50 * noOfFans * ValidTime() * 30;
 }
-float energyLights(int noOfLights) {
+float energyLights(int noOfLights)
+{
 	// returns Wh of all lights
 
 	return 15 * noOfLights * ValidTime() * 30;
 }
-float energyMiscSmall(float misSmallAppl) {
+float energyMiscSmall(float misSmallAppl)
+{
 	// returns Wh of all small miscellaneous appliances
 
 	return 20 * misSmallAppl * ValidTime() * 30;
 }
-float energyLightTotal(int rooms) {
+float energyLightTotal(int rooms)
+{
 	// returns Wh of all light appliances
 	int fans, lightsPerRoom, total_fans, total_lights, miscsmall;
 	float energy_Fans, energy_Lights, energy_mis_small;
 
-	do {
+	do
+	{
 		cout << "\nKindly enter the number of fans used per room: ";
 		cin >> fans;
 
@@ -241,14 +253,14 @@ float energyLightTotal(int rooms) {
 		else if (fans < 0 || fans > static_cast<int>(area * 3))
 		{
 			cout << "Kindly enter a value between 0 and " << static_cast<int>(area * 3) << endl;
-
 		}
 	} while (fans < 0 || fans > static_cast<int>(area * 3) || cin.fail());
 
 	total_fans = fans * rooms;
 	energy_Fans = energyFans(total_fans);
 
-	do {
+	do
+	{
 		cout << "\nKindly enter the number of lights used per room: ";
 		cin >> lightsPerRoom;
 
@@ -261,14 +273,14 @@ float energyLightTotal(int rooms) {
 		else if (lightsPerRoom < 0 || lightsPerRoom > static_cast<int>(area * 20))
 		{
 			cout << "Kindly enter a value between 0 and " << static_cast<int>(area * 20) << endl;
-
 		}
 	} while (lightsPerRoom < 0 || lightsPerRoom > static_cast<int>(area * 20) || cin.fail());
 
 	total_lights = lightsPerRoom * rooms;
 	energy_Lights = energyLights(total_lights);
 
-	do {
+	do
+	{
 		cout << "\nKindly enter the number of small miscellaneous appliances you use: ";
 		cin >> miscsmall;
 
@@ -281,7 +293,6 @@ float energyLightTotal(int rooms) {
 		else if (miscsmall < 0 || miscsmall > static_cast<int>(area * 20))
 		{
 			cout << "Kindly enter a value between 0 and " << static_cast<int>(area * 20) << endl;
-
 		}
 	} while (miscsmall < 0 || miscsmall > static_cast<int>(area * 20) || cin.fail());
 
@@ -292,10 +303,11 @@ float energyLightTotal(int rooms) {
 // solar panels
 int getSunpeakhours() // to calculate the peak sun hours per day
 {
-	// returns sun hours 
+	// returns sun hours
 	int sunhours;
 
-	do {
+	do
+	{
 		cout << "\n\t\tCalculation for the Sun Peak Hours in your Area\n\n";
 		cout << "\nFor Upper Pakistan, Enter 5.\n";
 		cout << "\nFor Lower Pakistan, Enter 6.\n";
@@ -329,7 +341,8 @@ float roofsize() // the roof area of the house in sq feet
 
 	cout << "\nAccording to Pakistani bylaws, a 1 Kanal property has a 1300 sqft roof, and a 10 Marla property has a 1150 sqft roof." << endl;
 
-	do {
+	do
+	{
 		cout << "\nKindly enter the roof size in square feet: ";
 		cin >> roofSqFt;
 
@@ -350,7 +363,8 @@ int platetype() // returns the plate type
 {
 	int typeofplate;
 
-	do {
+	do
+	{
 		cout << "\n\t\t Kindly Choose one of the Following Plate Options:\n";
 		cout << "\n575 Watt Plate - Small in size, less efficient and more panels required for the same power usage.\n";
 		cout << "\n595 Watt Plate - Large in size, more efficient and less panels required for the same power usage.\n";
@@ -375,10 +389,13 @@ int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) 
 	int totalplates, n;
 	float areaofplates;
 	totalplates = Wh_requirement / typeofplate;
-	if (typeofplate == 595) { // choice is 595
+	if (typeofplate == 595)
+	{									 // choice is 595
 		areaofplates = totalplates * 30; // 30 square feet is size of one panel.
-		if (areaofplates > roof_size) {
-			do {
+		if (areaofplates > roof_size)
+		{
+			do
+			{
 
 				cout << "\nWe regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation, kindly press 1 to proceed, or 2 to continue without the stand installation: ";
 				cin >> n;
@@ -394,22 +411,28 @@ int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) 
 				}
 			} while ((n != 1 && n != 2) || cin.fail());
 
-			if (n == 1) {
+			if (n == 1)
+			{
 				int addstandcost = 1;
 				return totalplates;
 			}
-			else {
+			else
+			{
 				return totalplates = roof_size / 30.0;
 			}
 		}
-		else {
+		else
+		{
 			return totalplates;
 		}
 	}
-	else { // choice is 575
+	else
+	{ // choice is 575
 		areaofplates = totalplates * 28.0;
-		if (areaofplates > roof_size) {
-			do {
+		if (areaofplates > roof_size)
+		{
+			do
+			{
 
 				cout << "\nWe regret to inform you that there is insufficient space for the current setup. If you are willing to incur additional charges for mounting stands to optimize the installation, kindly press 1 to proceed, or kindly 2 to continue without the stand installation: ";
 				cin >> n;
@@ -424,27 +447,30 @@ int calculationofplates(float Wh_requirement, float roof_size, int typeofplate) 
 					cout << "Kindly enter 1 or 2 only!" << endl;
 				}
 			} while ((n != 1 && n != 2) || cin.fail());
-			if (n == 1) {
+			if (n == 1)
+			{
 				int addstandcost = 1;
 				return totalplates;
 			}
-			else {
+			else
+			{
 				return totalplates = roof_size / 28.0;
 			}
 		}
-		else {
+		else
+		{
 			return totalplates;
 		}
 	}
-
 }
-char Invertortype() // calculates the type of invertor(ongrid/hybrid) 
+char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 // returns (O/H)
 {
 	char invertor;
 	char ans1, ans2, invertorChoice;
 
-	do {
+	do
+	{
 
 		cout << "\nDo you require electricity after sunset? (Y/N) ";
 		cin >> ans1;
@@ -460,7 +486,8 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 		}
 	} while (ans1 != 'Y' && ans1 != 'N' || cin.fail());
 
-	do {
+	do
+	{
 
 		cout << "\nDo you experience load shedding in your area? (Y/N) ";
 		cin >> ans2;
@@ -480,10 +507,11 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 		invertor = 'O';
 		cout << "\nBased on your requirements, an On-Grid system is the most suitable option.\n";
 	}
-	else {
+	else
+	{
 
-
-		do {
+		do
+		{
 
 			cout << "\t\t\nWe recommend selecting a Hybrid inverter for optimal performance.\n";
 			cout << "\nWould you like to incorporate a Hybrid Invertor with your On-Grid system ? (Y/N) ";
@@ -500,12 +528,14 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 			}
 		} while ((invertorChoice != 'Y' && invertorChoice != 'N') || cin.fail());
 
-		if (invertorChoice == 'Y') {
+		if (invertorChoice == 'Y')
+		{
 			battery = 1;
 			invertor = 'H';
 			cout << "\t\t\Based on your requirements, a hybrid system combined with an on-grid setup is suitable.\n\n";
 		}
-		else {
+		else
+		{
 			invertor = 'O';
 			cout << "\nBased on your requirements, an On - Grid system is the most suitable option.\n";
 		}
@@ -521,7 +551,8 @@ float invertorsize(char invertorType, int totalplates, int typeofplate) // to ca
 	float estkw;
 	float diff;
 
-	do {
+	do
+	{
 
 		cout << "\nDo you plan to expand your solar capacity in the future? (Y/N) ";
 		cin >> p;
@@ -540,8 +571,8 @@ float invertorsize(char invertorType, int totalplates, int typeofplate) // to ca
 	if (p == 'Y')
 	{
 
-		do {
-
+		do
+		{
 
 			cout << "\nHow many additional estimated kW will you require in the future ? Please specify the amount: ";
 			cin >> estkw;
@@ -556,7 +587,6 @@ float invertorsize(char invertorType, int totalplates, int typeofplate) // to ca
 				cout << "Kindly enter value between 0 and " << kw * 2 << endl;
 			}
 		} while (estkw <= 0 || estkw > kw * 2 || cin.fail());
-
 
 		kw = kw + estkw;
 		diff = static_cast<float>(kw) - static_cast<int>(kw);
@@ -581,8 +611,8 @@ int getHybridDiv(int invertorSize) // to calculate the size of the hybrid invert
 {
 	int hybridKW;
 
-	do {
-
+	do
+	{
 
 		cout << "\nOut of " << invertorSize << "KW, how much do you require solely for a hybrid system (must be in integer): ";
 		cin >> hybridKW;
@@ -598,8 +628,6 @@ int getHybridDiv(int invertorSize) // to calculate the size of the hybrid invert
 		}
 	} while (hybridKW < 0 || hybridKW > invertorSize || cin.fail());
 
-
-
 	return hybridKW;
 	// once returned, pass it as parameter to getOngridDiv function to calculate the remaining KW for ongrid KW
 }
@@ -612,7 +640,7 @@ int getOngridDiv(int invertorSize, char invertorType, int hybridKW) // to calcul
 		onGridKW = invertorSize - hybridKW;
 	return onGridKW;
 }
-float invertorcosts(int onGridKW, int hybridKW, char invertorType) // returns the total invertor cost																
+float invertorcosts(int onGridKW, int hybridKW, char invertorType) // returns the total invertor cost
 {
 	if (invertorType == 'H')
 		return (onGridKW * 20000) + (hybridKW * 55000);
@@ -636,10 +664,12 @@ float standcost(int totalplates) // returns the total cost of the stands
 float labourcosts() // to calculate the total cost of the stands
 {
 	float labourcosts;
-	if (kw <= 20) {
+	if (kw <= 20)
+	{
 		labourcosts = 80000;
 	}
-	else {
+	else
+	{
 		labourcosts = ((kw - 20) * 500) + (80000);
 	}
 	return labourcosts;
@@ -664,8 +694,8 @@ float costs(float invertorcosts, float platecost, float labourcosts, float other
 	float totalcost;
 	char e;
 
-	do {
-
+	do
+	{
 
 		cout << "\nDo you require earthing to protect your appliances from lightning? (Y/N) ";
 		cin >> e;
@@ -680,8 +710,6 @@ float costs(float invertorcosts, float platecost, float labourcosts, float other
 			cout << "Kindly enter 'Y' or 'N' only! " << endl;
 		}
 	} while ((e != 'Y' && e != 'N') || cin.fail());
-
-
 
 	if (e == 'Y')
 	{
@@ -702,14 +730,16 @@ float moneysaved(float total_energy)
 }
 
 // profile management
-int userOption() {
+int userOption()
+{
 	int option;
-	cout << endl << endl;
+	cout << endl
+		 << endl;
 	cout << "\t\t| MENU |" << endl;
 	cout << "\n1: Create New Profile \n2: View All Profiles \n3: Update Profile \n4: Delete Profile \n5: Restore previous profile\n6: Tips and Resources\n7: Exit\n\n";
 
-	do {
-
+	do
+	{
 
 		cout << "\tKindly select an option from 1 to 7 to proceed: ";
 		cin >> option;
@@ -719,16 +749,11 @@ int userOption() {
 			cin.ignore(1000, '\n');
 			cout << "\nInvalid input! Kindly enter integer value.\n";
 		}
-		else if (option < 1 || option>7)
+		else if (option < 1 || option > 7)
 		{
 			cout << "Kindly enter value between 1 and 7 only! " << endl;
 		}
-	} while (option < 1 || option>7 || cin.fail());
-
-
-
-
-
+	} while (option < 1 || option > 7 || cin.fail());
 
 	return option;
 }
@@ -736,8 +761,8 @@ bool login()
 {
 	cout << "\n\t\tKindly complete the required fields to proceed with your request.\n";
 
-
-	do {
+	do
+	{
 		cout << "\nKindly enter admin username: ";
 		cin >> logusername;
 		if (cin.fail())
@@ -748,13 +773,11 @@ bool login()
 		}
 	} while (cin.fail());
 
+	if (logusername == adminUsername)
+	{
 
-
-
-	if (logusername == adminUsername) {
-
-
-		do {
+		do
+		{
 			cout << "\nKindly enter admin password: ";
 			cin >> logpassword;
 			if (cin.fail())
@@ -765,28 +788,28 @@ bool login()
 			}
 		} while (cin.fail());
 
-
-
-		if (logpassword == adminPw) {
-			cout << "\nLogin successful. Welcome!" << endl << endl;
+		if (logpassword == adminPw)
+		{
+			cout << "\nLogin successful. Welcome!" << endl
+				 << endl;
 			return true;
 		}
-		else {
-			cout << "\nIncorrect admin username. Kindly try again." << endl << endl;
+		else
+		{
+			cout << "\nIncorrect admin username. Kindly try again." << endl
+				 << endl;
 			return false;
 		}
-
 	}
-	else {
-		cout << "\nIncorrect admin username. Kindly try again." << endl << endl;
+	else
+	{
+		cout << "\nIncorrect admin username. Kindly try again." << endl
+			 << endl;
 		return false;
 	}
 
-
-
-	//cout << "WELCOME USER: " << username << endl << endl << endl;
-	//cout << "PLEASE FILL OUT THE FORM TO RECEIVE AN ACCURATE ESTIMATION OF YOUR SOLAR PANEL REQUIREMENTS. ENSURE THAT YOU PROVIDE PRECISE DETAILS AND FIGURES FOR THE MOST RELIABLE RESULTS. FEEL FREE TO VERIFY YOUR VALUES AGAINST YOUR ELECTRICITY BILLS OR CONSULT WITH A TRUSTED ADVISOR IF NEEDED. " << endl << endl << endl << endl << endl;
-
+	// cout << "WELCOME USER: " << username << endl << endl << endl;
+	// cout << "PLEASE FILL OUT THE FORM TO RECEIVE AN ACCURATE ESTIMATION OF YOUR SOLAR PANEL REQUIREMENTS. ENSURE THAT YOU PROVIDE PRECISE DETAILS AND FIGURES FOR THE MOST RELIABLE RESULTS. FEEL FREE TO VERIFY YOUR VALUES AGAINST YOUR ELECTRICITY BILLS OR CONSULT WITH A TRUSTED ADVISOR IF NEEDED. " << endl << endl << endl << endl << endl;
 }
 string createaccount()
 {
@@ -794,9 +817,9 @@ string createaccount()
 	cout << "\t\t\t\t\tCREATE AN ACCOUNT\n\n";
 	cout << "\nKindly complete the following fields to successfully set up your account. Ensure all information provided is accurate to proceed smoothly with the setup process\n\n";
 
-
-	do {
-		cout << "Kindly enter your forename: ";   // add in file
+	do
+	{
+		cout << "Kindly enter your forename: "; // add in file
 		cin >> forename;
 		if (cin.fail())
 		{
@@ -806,10 +829,9 @@ string createaccount()
 		}
 	} while (cin.fail());
 
-
-
-	do {
-		cout << "Kindly enter your surname: ";		// add in file
+	do
+	{
+		cout << "Kindly enter your surname: "; // add in file
 		cin >> surname;
 		if (cin.fail())
 		{
@@ -825,9 +847,11 @@ string createaccount()
 	firstLine = "Profile Name: " + forename + " " + surname;
 	return firstLine;
 }
-bool checkFile() {
+bool checkFile()
+{
 	ifstream inData("profiles.txt");
-	if (!inData) {
+	if (!inData)
+	{
 		cout << "\nFile does not exist. Try another option.\n";
 		return false;
 	}
@@ -835,16 +859,16 @@ bool checkFile() {
 	return true;
 }
 
-void SolarCalcToFile(string firstLine) {
+void SolarCalcToFile(string firstLine)
+{
 	float total_energy_usage, watt_hr_requirement, roof_size, invertor_size, plate_cost, stand_cost, labour_cost, battery_cost, other_costs, money_saved;
 
 	char house, invertor_type;
 
-
 	int rooms, sun_hours, plate_type, plates_requirement, total_cost, Ongrid_invertor_size, Hybrid_invertor_size{}, invertor_cost;
 	cout << "\nPlease input the peak usage values during summers to ensure sufficient headroom and to minimize the risk of accidents.\n";
-	do {
-
+	do
+	{
 
 		cout << "\nKindly enter house measurement unit (M or Marla or K for Kanal): ";
 		cin >> house;
@@ -872,11 +896,13 @@ void SolarCalcToFile(string firstLine) {
 	plates_requirement = calculationofplates(watt_hr_requirement, roof_size, plate_type);
 	invertor_type = Invertortype();
 	invertor_size = invertorsize(invertor_type, plates_requirement, plate_type);
-	if (invertor_type == 'H') {
+	if (invertor_type == 'H')
+	{
 		Hybrid_invertor_size = getHybridDiv(invertor_size);
 		Ongrid_invertor_size = getOngridDiv(invertor_size, invertor_type, Hybrid_invertor_size);
 	}
-	else {
+	else
+	{
 		Ongrid_invertor_size = getOngridDiv(invertor_size, invertor_type, 0);
 	}
 	invertor_cost = invertorcosts(Ongrid_invertor_size, Hybrid_invertor_size, invertor_type);
@@ -903,7 +929,8 @@ void SolarCalcToFile(string firstLine) {
 	outData << "Earthing cost: " << earthing << " PKR" << endl;
 	outData << "Other costs: " << other_costs << " PKR" << endl;
 	outData << "Total cost has ammounted to: " << total_cost << " PKR" << endl;
-	outData << "Potential savings in bills: " << money_saved << " PKR" << endl << endl;
+	outData << "Potential savings in bills: " << money_saved << " PKR" << endl
+			<< endl;
 	outData.close();
 	cout << "\n\n\t\t\tRECORD ADDED TO FILE SUCCESSFULY.\n\n";
 	outData.open("backup.txt", ios::app);
@@ -920,7 +947,8 @@ void SolarCalcToFile(string firstLine) {
 	outData << "Earthing cost: " << earthing << " PKR" << endl;
 	outData << "Other costs: " << other_costs << " PKR" << endl;
 	outData << "Total cost has ammounted to: " << total_cost << " PKR" << endl;
-	outData << "Potential savings in bills: " << money_saved << " PKR" << endl << endl;
+	outData << "Potential savings in bills: " << money_saved << " PKR" << endl
+			<< endl;
 	outData.close();
 	cout << "\nTo access your summary, please select option 2.\n";
 	return;
@@ -936,14 +964,15 @@ void readfile()
 	}
 	string line;
 	// Read file line by line
-	while (getline(inData, line)) {
+	while (getline(inData, line))
+	{
 		cout << line << endl; // Output each line to the console
 	}
 	cout << endl;
 	inData.close();
-
 }
-bool nameExistsProfiles(string name) {
+bool nameExistsProfiles(string name)
+{
 	bool found = false;
 	string line;
 	ifstream inData("profiles.txt");
@@ -953,8 +982,10 @@ bool nameExistsProfiles(string name) {
 		inData.close();
 		return false;
 	}
-	while (getline(inData, line)) {
-		if (name == line) {
+	while (getline(inData, line))
+	{
+		if (name == line)
+		{
 			inData.close();
 			return true;
 		}
@@ -962,7 +993,8 @@ bool nameExistsProfiles(string name) {
 	inData.close();
 	return false;
 }
-bool nameExistsBackup(string name) {
+bool nameExistsBackup(string name)
+{
 	bool found = false;
 	string line;
 	ifstream inData("backup.txt");
@@ -972,8 +1004,10 @@ bool nameExistsBackup(string name) {
 		inData.close();
 		return false;
 	}
-	while (getline(inData, line)) {
-		if (name == line) {
+	while (getline(inData, line))
+	{
+		if (name == line)
+		{
 			inData.close();
 			return true;
 		}
@@ -986,9 +1020,8 @@ void deleteProfile(string checkName)
 	char choice;
 	// format of checkName is "Profile Name: firsName LastName"
 
-
-
-	do {
+	do
+	{
 		cout << "\nAre you sure you want to delete this profile? (Y/N) ";
 		cin >> choice;
 		if (cin.fail())
@@ -1003,32 +1036,34 @@ void deleteProfile(string checkName)
 		}
 	} while (choice != 'Y' && choice != 'N' || cin.fail());
 
-
 	if (choice == 'N')
 		return;
 	string line;
-	//backup profile content to backup.txt
+	// backup profile content to backup.txt
 	ifstream inData("profiles.txt");
 	ofstream outData("backup.txt");
 
 	while (getline(inData, line))
 	{
 		outData << line << endl;
-
 	}
 	outData.close();
 	inData.close();
-	//copying profile data from profiles.txt to temp.txt
+	// copying profile data from profiles.txt to temp.txt
 
 	inData.open("profiles.txt");
 	outData.open("temp.txt");
-	while (getline(inData, line)) {
-		if (line == checkName) {		// copy  13 lines
-			for (int i = 0; i < 14; i++) {
+	while (getline(inData, line))
+	{
+		if (line == checkName)
+		{ // copy  13 lines
+			for (int i = 0; i < 14; i++)
+			{
 				getline(inData, line);
 			}
 		}
-		else {
+		else
+		{
 			outData << line << endl;
 		}
 	}
@@ -1036,9 +1071,10 @@ void deleteProfile(string checkName)
 	inData.close();
 	outData.close();
 
-	ofstream outDataFinal("profiles.txt", ios::trunc);    // emptied contents of profile.txt
+	ofstream outDataFinal("profiles.txt", ios::trunc); // emptied contents of profile.txt
 	ifstream inDataFinal("temp.txt");
-	while (getline(inDataFinal, line)) {
+	while (getline(inDataFinal, line))
+	{
 		outDataFinal << line << endl;
 	}
 	inDataFinal.close();
@@ -1046,18 +1082,23 @@ void deleteProfile(string checkName)
 	cout << "\nProfile deleted successfully" << endl;
 	remove("temp.txt");
 }
-void updateProfile(string checkName) {
+void updateProfile(string checkName)
+{
 	string line;
 	ifstream inData("profiles.txt");
 	ofstream outData("temp.txt");
 
-	while (getline(inData, line)) {
-		if (line == checkName) {		// copy  13 lines
-			for (int i = 0; i < 14; i++) {
+	while (getline(inData, line))
+	{
+		if (line == checkName)
+		{ // copy  13 lines
+			for (int i = 0; i < 14; i++)
+			{
 				getline(inData, line);
 			}
 		}
-		else {
+		else
+		{
 			outData << line << endl;
 		}
 	}
@@ -1066,10 +1107,10 @@ void updateProfile(string checkName) {
 
 	// profiles copied to temp.txt
 
-
-	ofstream outDataFinal("profiles.txt", ios::trunc);    // emptied contents of profile.txt
+	ofstream outDataFinal("profiles.txt", ios::trunc); // emptied contents of profile.txt
 	ifstream inDataFinal("temp.txt");
-	while (getline(inDataFinal, line)) {
+	while (getline(inDataFinal, line))
+	{
 		outDataFinal << line << endl;
 	}
 	inDataFinal.close();
@@ -1085,7 +1126,8 @@ void restorefile()
 	ifstream inData("backup.txt");
 	ofstream outData("profiles.txt", ios::app);
 
-	if (!inData) {
+	if (!inData)
+	{
 		cout << "File does not exist. Please choose another option to continue.\n";
 		return;
 	}
@@ -1094,7 +1136,8 @@ void restorefile()
 	cout << "Enter surname: ";
 	cin >> last;
 	checkline = "Profile Name: " + fore + " " + last;
-	if(!nameExistsBackup(checkline)){
+	if (!nameExistsBackup(checkline))
+	{
 		cout << "\nName does not exist for the file to be restored.\n";
 		return;
 	}
@@ -1109,7 +1152,8 @@ void restorefile()
 				{
 					outData << line << endl;
 				}
-				else {
+				else
+				{
 					break;
 				}
 			}
@@ -1121,8 +1165,8 @@ void restorefile()
 	cout << "File restored successfully.\n";
 }
 
-
-int main() {
+int main()
+{
 	int option;
 	bool fileExist = false, nameExistence, flag;
 	string checkName, firstLine;
@@ -1131,7 +1175,8 @@ int main() {
 	cout << "\t\t\t\t|    WELCOME TO THE SOLAR PANEL ESTIMATOR    |\n";
 	cout << "\t\t\t\t==============================================\n";
 
-	while (true) {
+	while (true)
+	{
 		option = userOption();
 		switch (option)
 		{
@@ -1149,7 +1194,8 @@ int main() {
 			if (login())
 				readfile();
 			else
-				cout << "\nLogin failed. Please choose a different option to proceed." << endl << endl;
+				cout << "\nLogin failed. Please choose a different option to proceed." << endl
+					 << endl;
 
 			break;
 		case 3:
@@ -1158,11 +1204,14 @@ int main() {
 			// check file, if doesnt exist then print No profiles exist and ask options 1-5 again
 			// if it exists, ask which profile in file
 			if (!login())
-				cout << "\nLogin failed. Please choose a different option to proceed." << endl << endl;
-			else {
+				cout << "\nLogin failed. Please choose a different option to proceed." << endl
+					 << endl;
+			else
+			{
 				cout << "\n\t\tTo update your profile, please follow the provided steps.\n";
 
-				do {
+				do
+				{
 					cout << "\nKindly enter your first name: ";
 					cin >> forename;
 					if (cin.fail())
@@ -1173,7 +1222,8 @@ int main() {
 					}
 				} while (cin.fail());
 
-				do {
+				do
+				{
 					cout << "\nKindly enter your last name : ";
 					cin >> surname;
 					if (cin.fail())
@@ -1185,31 +1235,35 @@ int main() {
 				} while (cin.fail());
 				checkName = "Profile Name: " + forename + " " + surname;
 				nameExistence = nameExistsProfiles(checkName);
-				if (!nameExistence) {
-					cout << "\nProfile update unsuccessful. Please choose a different option to proceed." << endl << endl;
+				if (!nameExistence)
+				{
+					cout << "\nProfile update unsuccessful. Please choose a different option to proceed." << endl
+						 << endl;
 				}
-				else {
+				else
+				{
 					updateProfile(checkName);
 				}
-
 			}
-
 
 			break;
 		case 4:
 			// deletes profile
 			// ask for pw and username
-			// check file, 
-				// if doesnt exist then print No profiles exist and ask options 1-5 again
-				// if exists, ask which profile in file
-					// if profile doesnt exists, print no profile
-					// else confirm deletion
+			// check file,
+			// if doesnt exist then print No profiles exist and ask options 1-5 again
+			// if exists, ask which profile in file
+			// if profile doesnt exists, print no profile
+			// else confirm deletion
 
 			if (!login())
-				cout << "\nLogin unsuccessful. Kindly select an alternative option to continue." << endl << endl;
-			else {
+				cout << "\nLogin unsuccessful. Kindly select an alternative option to continue." << endl
+					 << endl;
+			else
+			{
 				cout << "\n\t\tTo delete your profile, please follow the provided steps.\n\n";
-				do {
+				do
+				{
 					cout << "Kindly enter your first name: ";
 					cin >> forename;
 					if (cin.fail())
@@ -1220,7 +1274,8 @@ int main() {
 					}
 				} while (cin.fail());
 
-				do {
+				do
+				{
 					cout << "Kindly enter your last name : ";
 					cin >> surname;
 					if (cin.fail())
@@ -1232,14 +1287,15 @@ int main() {
 				} while (cin.fail());
 				checkName = "Profile Name: " + forename + " " + surname;
 				nameExistence = nameExistsProfiles(checkName);
-				if (!nameExistence) {
-					cout << "\nProfile deletion unsuccessful. Please choose a different option to proceed." << endl << endl;
+				if (!nameExistence)
+				{
+					cout << "\nProfile deletion unsuccessful. Please choose a different option to proceed." << endl
+						 << endl;
 				}
-				else {
+				else
+				{
 					deleteProfile(checkName);
-
 				}
-
 			}
 			break;
 		case 5:
@@ -1249,15 +1305,16 @@ int main() {
 		case 6:
 
 			cout << "\nTo learn more about solar energy and the benefits you can achieve by installing solar panels, kindly visit the website provided below by pressing leftCtrl and left mouse button\n";
-			cout << "https://www.constellation.com/energy-101/energy-innovation/solar-energy-pros-and-cons.html" << endl << endl;
+			cout << "https://www.constellation.com/energy-101/energy-innovation/solar-energy-pros-and-cons.html" << endl
+				 << endl;
 			cout << "Choosing a 575W solar panel over a 595W panel depends on specific needs and constraints:\n\n"
-				<< "  1. Smaller Size         : Better fit for limited space or precise placements.\n"
-				<< "  2. Ease of Installation : Lighter and easier to handle, reducing labor effort.\n"
-				<< "  3. System Compatibility : Matches existing arrays in size or efficiency.\n"
-				<< "  4. Cost                 : Lower upfront cost, despite comparable overall expense.\n"
-				<< "  5. Availability         : Shorter lead times or higher stock levels.\n"
-				<< "  6. Small Roofs          : Better suited for optimizing limited roof space.\n"
-				<< "  7. Project Requirements : Tailored to specific efficiency or design needs.\n\n\n";
+				 << "  1. Smaller Size         : Better fit for limited space or precise placements.\n"
+				 << "  2. Ease of Installation : Lighter and easier to handle, reducing labor effort.\n"
+				 << "  3. System Compatibility : Matches existing arrays in size or efficiency.\n"
+				 << "  4. Cost                 : Lower upfront cost, despite comparable overall expense.\n"
+				 << "  5. Availability         : Shorter lead times or higher stock levels.\n"
+				 << "  6. Small Roofs          : Better suited for optimizing limited roof space.\n"
+				 << "  7. Project Requirements : Tailored to specific efficiency or design needs.\n\n\n";
 
 			cout << "Brushing solar panels periodically helps improve efficiency by:\n\n";
 			cout << " 1. Removing dust and dirt that block sunlight absorption.\n";
