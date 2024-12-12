@@ -475,7 +475,7 @@ char Invertortype() // calculates the type of invertor(ongrid/hybrid)
 			cout << "Kindly enter 'N' or 'Y' only!" << endl;
 		}
 	} while (ans2 != 'Y' && ans2 != 'N' || cin.fail());
-	if (ans1 == 'Y' && ans2 == 'Y')
+	if (ans1 == 'N' && ans2 == 'N')
 	{
 		invertor = 'O';
 		cout << "\nBased on your requirements, an On-Grid system is the most suitable option.\n";
